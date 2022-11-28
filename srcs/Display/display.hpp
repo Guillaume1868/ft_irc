@@ -11,6 +11,8 @@ class Display {
         ~Display();
         void    update();
         void    addMessage(std::string msg);
+        std::string    color(uint8_t r, uint8_t g, uint8_t b);
+        std::string    color();
 
     private:
         bool _fancyMode;
