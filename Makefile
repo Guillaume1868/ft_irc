@@ -1,12 +1,10 @@
 NAME 	=	ircserv
 
-FILES	=	main
+FILES	=	Display/display
 
-SRC		=	$(addprefix src/, $(FILES:$(FILE_EXTENSION)=.c))
+SRC		=	$(addprefix srcs/, $(FILES:$(FILE_EXTENSION)=.c))
 OBJ		=	$(addprefix objs/, ${FILES:$(FILE_EXTENSION)=.o})
-_INC	=	-Lmlx -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz
-INC		=	-Lmlx -lmlx -framework OpenGL -framework AppKit
-CC		=	gcc
+CC		=	c++
 
 RM		=	rm -f
 
@@ -18,14 +16,13 @@ _INFO       =   [$(YELLOW)INFO$(RESET)]
 
 all:	header $(NAME)
 
-objs/%.o: src/%.c
+objs/%.o: srcs/%.cpp
 	@mkdir -p $(dir $@)
-	@$(CC) -Wall -Wextra -Werror -g -c $< -o $@
+	@$(CC) -Wall -Wextra -Werror -std=c++98 -g -c $< -o $@
 	@printf "$(_INFO) OBJ $@ compiled.\n"
 
 $(NAME): $(OBJ)
-	@$(MAKE) -C mlx
-	@$(CC) $(OBJ) $(INC) -g -o $(NAME)
+	@$(CC) $(OBJ) -Wall -Wextra -Werror -std=c++98 -g -o $(NAME)
 	@printf "$(_SUCCESS) $(NAME) ready.\n"
 
 clean:
@@ -33,7 +30,6 @@ clean:
 	@printf "$(_INFO) $(OBJ) removed.\n"
 
 fclean: clean
-	# @ $(MAKE) clean -C mlx
 	@ $(RM) $(NAME)
 	@printf "$(_INFO) $(NAME) removed.\n"
 re: fclean all
