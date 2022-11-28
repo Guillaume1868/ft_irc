@@ -1,3 +1,38 @@
 # ft_irc
 
-[![](https://mermaid.ink/img/pako:eNqNVMtuwjAQ_BXLpxLCD0Soh1JVqiraA6KnSMi1tyEitiPb6UMUvr3rxKEhBIovWY13ZmfXdraUawE0obxg1t7nLDNMporgWoD5AEMmk4jM1kwpKHr4zy1hMy0lU-KEsbRgjsCETOas3C-cyVUWH4h7suJNZC-lBwM-u4kuZJMKaysmIa5dIMcDJ4SQvCqx709tRG9_nIFbBqEHo-Vzzjc3gaMwHjX59dhae9sG8-sg7_kd-KzNqJ4EqnAHYvlnuGa9IqpNn4gMXYJhuHU14c0b7euPW5nptG1R2ix0uOs22h7buU6jDn6ndYEogHgpO7XgC3jl4GYUHem3ys29esIJJ1pBKIv2yPE1aXCfdsXQ_3My0KifUFf5UTmysppvwA3Uawc8ZAUtDtphlVuDcjlneODXngWNqQQjWS7wydb-UooyKE8TDAUzm5Smyuehvl58K04TZyqIaVUKrBReOE3eWWERBZFjrXn4B_jP7heUfU5B?type=png)](https://mermaid.live/edit#pako:eNqNVMtuwjAQ_BXLpxLCD0Soh1JVqiraA6KnSMi1tyEitiPb6UMUvr3rxKEhBIovWY13ZmfXdraUawE0obxg1t7nLDNMporgWoD5AEMmk4jM1kwpKHr4zy1hMy0lU-KEsbRgjsCETOas3C-cyVUWH4h7suJNZC-lBwM-u4kuZJMKaysmIa5dIMcDJ4SQvCqx709tRG9_nIFbBqEHo-Vzzjc3gaMwHjX59dhae9sG8-sg7_kd-KzNqJ4EqnAHYvlnuGa9IqpNn4gMXYJhuHU14c0b7euPW5nptG1R2ix0uOs22h7buU6jDn6ndYEogHgpO7XgC3jl4GYUHem3ys29esIJJ1pBKIv2yPE1aXCfdsXQ_3My0KifUFf5UTmysppvwA3Uawc8ZAUtDtphlVuDcjlneODXngWNqQQjWS7wydb-UooyKE8TDAUzm5Smyuehvl58K04TZyqIaVUKrBReOE3eWWERBZFjrXn4B_jP7heUfU5B)
+```mermaid
+classDiagram
+    Server --* Channel
+    Server --|> aCommand
+    Server --* User
+    Server : -Map~String, aCommand~ _commands
+    Server : -Map~String, Channel~ _channels
+    Server : -Map~String username, User~ _users
+    Server : -String _password
+    Server : +getUsernameFromNick(String nick)
+    class Channel{
+        -String _name
+        -Map~String username, User*~ _connectedUsers
+        -Vector~String username~ _operatorUsers
+        -Vector~String username~ _bannedUsers
+        +operator<<(String msg)
+    }
+    class aCommand{
+        -String _name*
+        -Bool _needOp
+        +execute()*
+    }
+    aCommand --|> Kick:one class per commands
+    class Kick{
+        -String _name
+        -Bool _needOp
+        +execute()
+    }
+    class User{
+        -Int _socket
+        -String _username
+        -String _nickname
+        -Bool _authenticated
+        +operator<<(String msg)
+    }
+```
