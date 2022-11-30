@@ -1,9 +1,12 @@
 #include "Server.hpp"
+#include "User.hpp"
+
+#include <vector>
 
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
 	listen();
-	//pollLoop(); testing
+	pollLoop(); //testing
 }
 
 Server::~Server(void)
@@ -51,40 +54,34 @@ void Server::listen()
 
 void	Server::pollLoop()
 {
-	struct pollfd fds[200];
-	int				rc;
-	int				nfds = 1;
-	std::string		buffer[4096];
-	memset(fds, 0 , sizeof(fds));
-	fds[0].fd = _socket;
-	fds[0].events = POLLIN;
-	int	timeout = (3 * 60 * 1000);
+	pollfd pfd = {.fd = _socket, .events = POLLIN, .revents = 0};
+	_pfds.push_back(pfd);
 	while (1)
 	{
-		rc = poll(fds, 1, timeout);
-		for (int i = 0; i < (int)(sizeof(fds)); i++)
+		if (poll(_pfds.data(), _pfds.size(), -1) == -1)
+			throw std::runtime_error("error: poll");
+		for (size_t i = 0; i < _pfds.size(); i++)
 		{
-				//std::cout << "----------------------------\n";
-				//std::cout << fds[i].fd << std::endl;
-				//std::cout << _socket << std::endl;
-				//std::cout << "----------------------------\n";
-			if (fds[i].revents == 0)
+			if (_pfds[i].revents & POLLIN)
 			{
-				//std::cout << "continue\n";
-				continue;
-			}
-			if (fds[i].fd == _socket)
-			{
-				int	new_sd = accept(_socket, NULL, NULL);
-				fds[nfds].fd = new_sd;
-				fds[nfds].events = POLLIN;
-				nfds++;
-			}
-			else
-			{
-				std::cout << "Read\n\n";
-				rc = recv(fds[i].fd, buffer, sizeof(buffer), 0);
-				send(fds[i].fd, buffer, rc, 0);
+				if (_pfds[i].fd == _socket)
+				{
+					int new_fd;
+					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
+						throw std::runtime_error("error: accept");
+					_users.push_back(new User(new_fd));
+					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
+					_pfds.push_back(pfd);
+				}
+				else if (i > 0)
+				{
+					char buffer[500];
+
+					memset(buffer, '\0', sizeof(buffer));
+					if (recv(_users[i - 1]->getFd(), buffer, sizeof(buffer), 0) <= 0)
+							break;
+					std::cout << "Message:" << buffer;
+				}
 			}
 		}
 	}
