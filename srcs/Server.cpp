@@ -100,12 +100,6 @@ void	Server::pollLoop()
 						else
 						{
 							std::cout << "Message from NC:" << _users[i - 1]._msgBuffer;
-							std::cout << "Parsed :\n";
-							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
-							for (std::vector<std::string>::iterator i = parsed.begin(); i != parsed.end(); i++)
-							{
-								std::cout << (*i) << std::endl;
-							}
 							(_users[i - 1]._msgBuffer).clear();
 						}
 					}
@@ -117,12 +111,14 @@ void	Server::pollLoop()
 
 std::vector<std::string>	Server::parser(std::string input, std::string delimiter)
 {
-	std::vector<std::string>	tmp;
-	std::string		 	tmpDelimiter = delimiter;
-	while (input.length() > 0)
-	{
-		std::string element = input.substr(0, input.find(tmpDelimiter));
-		tmp.push_back(element);
+	size_t pos = 0;
+	std::string token;
+	std::vector<std::string> tmp;
+	while ((pos = input.find(delimiter)) != std::string::npos) {
+		token = input.substr(0, pos);
+		input.erase(0, pos + 1);
+		tmp.push_back(token);
 	}
+	tmp.push_back(input);
 	return (tmp);
 }
