@@ -3,10 +3,10 @@
 #include "Server.hpp"
 #include "Display/Display.hpp"
 
+Display display;
 
 int	main(int argc, char **argv)
 {
-	Display display;
 	if (argc != 3)
 	{
 		display.addError("Usage: ./irc <port> <password>");

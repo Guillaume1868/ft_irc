@@ -18,6 +18,7 @@
 #include "Channel.hpp"
 #include "Display/Display.hpp"
 #include "Command/Ping.hpp"
+#include "Command/Pass.hpp"
 
 class ACommand;
 
@@ -38,8 +39,12 @@ class Server
 	void		listen();
 	void		pollLoop();
 	int		_socket;
-	std::vector<std::string>     parser(std::string input, std::string delimiter);
-	Display display;
+	int				findFdByNickname(std::string name);
+	int				findFdByUsername(std::string name);
+	void				sendMsg(User *user, std::string msg);
+	void				sendMsg(std::string name, std::string msg);
+	void				findCommand(std::vector<std::string> args, size_t user_i);
+	std::vector<std::string>	parser(std::string input, std::string delimiter);
 };
 
 #endif

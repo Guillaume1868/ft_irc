@@ -2,13 +2,16 @@
 
 #include <vector>
 
+extern Display display;
+
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
 	display.setup(&_channels, &_users);
 	display.update();
 	listen();
-	_commands["Ping"] = new Ping(this);
-	pollLoop(); //testing
+	_commands["PING"] = new Ping(this);
+	_commands["PASS"] = new Pass(this);
+	pollLoop();
 }
 
 Server::~Server(void)
@@ -97,19 +100,16 @@ void	Server::pollLoop()
 						if ((_users[i - 1]._msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
 							display.addMessage("Message:" + _users[i - 1]._msgBuffer);
+							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
+							findCommand(parsed, i);
 							(_users[i - 1]._msgBuffer).clear();
 						}
 						else
 						{
 							display.addMessage("Message from NC:" + _users[i - 1]._msgBuffer);
+							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
+							findCommand(parsed, i);
 							(_users[i - 1]._msgBuffer).clear();
-				
-std::map<std::string, ACommand*>::iterator it = _commands.find("Ping");
-	if (it != _commands.end()) {
-		ACommand *command = it->second;
-			command->execute(_users[i - 1], parser(_users[i - 1]._msgBuffer, " "));
-	}
-
 						}
 					}
 				}
@@ -118,16 +118,69 @@ std::map<std::string, ACommand*>::iterator it = _commands.find("Ping");
 	}
 }
 
+void	Server::findCommand(std::vector<std::string> args, size_t user_i)
+{
+	std::map<std::string, ACommand*>::iterator i = _commands.find(args.front());
+	if (i != _commands.end())
+	{
+		ACommand *command = i->second;
+		command->execute(_users[user_i - 1], args);
+	}
+}
+
 std::vector<std::string>	Server::parser(std::string input, std::string delimiter)
 {
 	size_t pos = 0;
 	std::string token;
 	std::vector<std::string> tmp;
-	while ((pos = input.find(delimiter)) != std::string::npos) {
+	while ((pos = input.find(delimiter)) != std::string::npos)
+	{
 		token = input.substr(0, pos);
 		input.erase(0, pos + 1);
 		tmp.push_back(token);
 	}
 	tmp.push_back(input);
 	return (tmp);
+}
+
+int	Server::findFdByNickname(std::string name)
+{
+	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); i++)
+	{
+		if ((*i).getNickname() == name)
+			return ((*i).getFd());
+	}
+	return 0;
+}
+
+int	Server::findFdByUsername(std::string name)
+{
+	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); i++)
+	{
+		if ((*i).getUsername() == name)
+			return ((*i).getFd());
+	}
+	return 0;
+}
+
+void	Server::sendMsg(std::string name, std::string msg)
+{
+	int b_sent = 0;
+	int total_b_sent = 0;
+	while (total_b_sent != (int)msg.size())
+	{
+		b_sent = send(findFdByNickname(name), &msg[b_sent], msg.size() - total_b_sent, 0);
+		total_b_sent += b_sent;
+	}
+}
+
+void	Server::sendMsg(User *user, std::string msg)
+{
+	int b_sent = 0;
+	int total_b_sent = 0;
+	while (total_b_sent != (int)msg.size())
+	{
+		b_sent = send(user->getFd(), &msg[b_sent], msg.size() - total_b_sent, 0);
+		total_b_sent += b_sent;
+	}
 }
