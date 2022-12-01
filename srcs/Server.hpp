@@ -18,6 +18,7 @@
 #include "Channel.hpp"
 #include "Display/Display.hpp"
 #include "Command/Ping.hpp"
+#include "Command/Pass.hpp"
 
 class ACommand;
 
@@ -39,7 +40,6 @@ class Server
 	void		pollLoop();
 	int		_socket;
 	std::vector<std::string>     parser(std::string input, std::string delimiter);
-	Display display;
 };
 
 #endif
