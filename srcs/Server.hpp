@@ -18,12 +18,13 @@
 class Server
 {
   private:
-	std::string		_host;
-	std::string		_servername;
-	std::string		_port;
-	std::string		_pass;
-	std::vector<pollfd>	_pfds;
-	std::vector<User *>	_users;
+	std::string			_host;
+	std::string			_servername;
+	std::string			_port;
+	std::string			_pass;
+	std::vector<pollfd>		_pfds;
+	std::vector<User *>		_users;
+	std::map<std::string, Channel>	_channels;
   public:
 	Server(std::string host, std::string port, std::string password);
 	~Server();

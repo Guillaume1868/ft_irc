@@ -108,3 +108,9 @@ void	Server::pollLoop()
 		}
 	}
 }
+
+/*std::vector	Server::parser(std::string)
+{
+	std::vector	tmp;
+	for (
+}*/
