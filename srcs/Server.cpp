@@ -5,6 +5,8 @@
 
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
+	display.setup(&_channels, &_users);
+	display.update();
 	listen();
 	pollLoop(); //testing
 }
@@ -24,34 +26,34 @@ void Server::listen()
 	const int enable = 1;	
 	if (getaddrinfo(_host.c_str(), _port.c_str(), &hints, &servinfo) != 0)
 	{
-		std::cout << "Error: getaddrinfo failed" << std::endl;
+		display.addError("Error: getaddrinfo failed");
 		//kill server function;
 	}
 	if ((_socket = socket(servinfo->ai_family, servinfo->ai_socktype, servinfo->ai_protocol)) == -1)
 	{
-		std::cout << "Error: socket failed" << std::endl;
+		display.addError("Error: socket failed");
 		//kill server function;
 	}
 	else if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
 	{
 		close(_socket);
 		freeaddrinfo(servinfo);
-		std::cout << "Error: setsockopt failed" << std::endl;
+		display.addError("Error: setsockopt failed");
 		//kill server function;
 	}
 	else if (bind(_socket, servinfo->ai_addr, servinfo->ai_addrlen) == -1)
 	{
 		close(_socket);
 		freeaddrinfo(servinfo);
-		std::cout << "Error: binding failed" << std::endl;
+		display.addError("Error: binding failed");
 		//kill server function;
 	}
 	int flags = fcntl(_socket, F_GETFL, 0);
     	fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
 	freeaddrinfo(servinfo);
 	if (::listen(_socket, SOMAXCONN) == -1)
-		std::cout << "Error: listening failed" << std::endl;
-	std::cout << "Server is listening on port " << _port << std::endl;
+		display.addError("Error: listening failed");
+	display.addMessage( display.color(0,255,0) + "Server is listening on port " + _port);
 }
 
 void	Server::pollLoop()
@@ -62,7 +64,7 @@ void	Server::pollLoop()
 	{
 		if (poll(_pfds.data(), _pfds.size(), -1) == -1)
 		{
-			std::cout << "Error: poll" << std::endl;
+			display.addError("Error: poll");
 			//kill server function;
 		}
 		for (size_t i = 0; i < _pfds.size(); i++)
@@ -94,17 +96,17 @@ void	Server::pollLoop()
 					{
 						if ((_users[i - 1]._msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
-							std::cout << "Message:" << _users[i - 1]._msgBuffer;
+							display.addMessage("Message:" + _users[i - 1]._msgBuffer);
 							(_users[i - 1]._msgBuffer).clear();
 						}
 						else
 						{
-							std::cout << "Message from NC:" << _users[i - 1]._msgBuffer;
-							std::cout << "Parsed :\n";
+							display.addMessage("Message from NC:" + _users[i - 1]._msgBuffer);
+							display.addMessage("Parsed :\n");
 							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
 							for (std::vector<std::string>::iterator i = parsed.begin(); i != parsed.end(); i++)
 							{
-								std::cout << (*i) << std::endl;
+								display.addMessage(*i);
 							}
 							(_users[i - 1]._msgBuffer).clear();
 						}

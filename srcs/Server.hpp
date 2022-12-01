@@ -16,7 +16,7 @@
 
 #include "User.hpp"
 #include "Channel.hpp"
-
+#include "Display/Display.hpp"
 class Server
 {
   private:
@@ -34,6 +34,7 @@ class Server
 	void		pollLoop();
 	int		_socket;
 	std::vector<std::string>     parser(std::string input, std::string delimiter);
+	Display display;
 };
 
 #endif
