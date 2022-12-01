@@ -2,12 +2,15 @@
 
 #include <vector>
 
+extern Display display;
+
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
 	display.setup(&_channels, &_users);
 	display.update();
 	listen();
-	_commands["Ping"] = new Ping(this);
+	_commands["PING"] = new Ping(this);
+	_commands["PASS"] = new Pass(this);
 	pollLoop(); //testing
 }
 
@@ -105,10 +108,10 @@ void	Server::pollLoop()
 							(_users[i - 1]._msgBuffer).clear();
 				
 std::map<std::string, ACommand*>::iterator it = _commands.find("Ping");
-	if (it != _commands.end()) {
-		ACommand *command = it->second;
-			command->execute(_users[i - 1], parser(_users[i - 1]._msgBuffer, " "));
-	}
+if (it != _commands.end()) {
+	ACommand *command = it->second;
+		command->execute(_users[i - 1], parser(_users[i - 1]._msgBuffer, " "));
+}
 
 						}
 					}

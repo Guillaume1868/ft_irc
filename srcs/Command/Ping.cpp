@@ -16,5 +16,6 @@ int	Ping::execute(User &user, std::vector<std::string> args)
 		pong += (" " + args[i]);
 	std::cout << "Ping/Pong\n";
 	//send to user;
+	(void) user;
     return 0;
 }
