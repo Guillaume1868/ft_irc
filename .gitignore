@@ -1,2 +1,4 @@
 ircserv
 *.o
+a.out
+.vscode/settings.json
