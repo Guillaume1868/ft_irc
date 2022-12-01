@@ -88,7 +88,7 @@ void	Server::pollLoop()
 					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
 					if (n > 0)
 						_users[i - 1]->_msgBuffer += buffer;
-        				while(_users[i - 1]->_msgBuffer[++end])
+ 	      				while(_users[i - 1]->_msgBuffer[++end])
             					;
     					if (_users[i - 1]->_msgBuffer[end - 1] == '\n')
 					{
