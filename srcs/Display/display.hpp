@@ -12,6 +12,7 @@ public:
 	~Display();
 	void update();
 	void addMessage(std::string msg);
+	void addError(std::string msg);
 	std::string color(uint8_t r, uint8_t g, uint8_t b);
 	std::string color();
 
@@ -22,5 +23,4 @@ private:
 	std::map<std::string, std::string> *_users;
 	std::map<std::string, std::string> *_channels;
 };
-
 #endif

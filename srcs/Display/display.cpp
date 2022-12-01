@@ -2,8 +2,9 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <iomanip>
-#include "display.hpp"
+#include "Display.hpp"
 #include <unistd.h>
 
 std::string Display::trunc(std::string str, int len)
@@ -94,6 +95,24 @@ void Display::addMessage(std::string msg)
 	}
 }
 
+void Display::addError(std::string msg)
+{
+    msg = color(255,0,0) + msg;
+	if (_fancyMode)
+	{
+		if (_messages.size() == 20)
+		{
+			_messages.erase(_messages.begin());
+		}
+		_messages.push_back(msg);
+		this->update();
+	}
+	else
+	{
+		std::cout << color(255,0,0) << msg << std::endl;
+	}
+}
+
 Display::Display(std::map<std::string, std::string> *pChanPtr, std::map<std::string, std::string> *pUsrPtr)
 {
 	this->_channels = pChanPtr;
@@ -111,39 +130,39 @@ Display::~Display()
 	std::cout << "\033[?25h" << std::flush;
 }
 
-int main()
-{
-	std::map<std::string, std::string> _users;
-	std::map<std::string, std::string> _channels;
-	Display disp(&_channels, &_users);
-	// Display disp;
-	_channels.insert(std::pair<std::string, std::string>("chan", "chan"));
-	_users.insert(std::pair<std::string, std::string>("Gaubert", "Guillaume"));
-	disp.addMessage("1");
-	usleep(500000);
-	_channels.insert(std::pair<std::string, std::string>("4aaaaaaaaaaaaaaaa", "4"));
-	_users.insert(std::pair<std::string, std::string>("1aaaaaaaaaaaaaaa", "1"));
-	_users.insert(std::pair<std::string, std::string>("2", "2"));
-	disp.addMessage("2");
-	usleep(500000);
-	_channels.insert(std::pair<std::string, std::string>("5", "5"));
-	_channels.insert(std::pair<std::string, std::string>("3", "3"));
-	disp.addMessage("3");
-	usleep(500000);
-	_users.insert(std::pair<std::string, std::string>("3", "3"));
-	_users.insert(std::pair<std::string, std::string>("4", "4"));
-	disp.addMessage("4");
-	usleep(500000);
-	_channels.insert(std::pair<std::string, std::string>("2", "2"));
-	disp.addMessage("5");
-	usleep(500000);
-	_channels.insert(std::pair<std::string, std::string>("1", "1"));
-	_users.insert(std::pair<std::string, std::string>("5", "5"));
-	_users.insert(std::pair<std::string, std::string>("6", "6"));
-	disp.addMessage("6");
-	usleep(500000);
-	disp.addMessage("7");
-	usleep(500000);
-	_channels.insert(std::pair<std::string, std::string>("6", "6"));
-	disp.addMessage("8");
-}
+// int main()
+// {
+// 	std::map<std::string, std::string> _users;
+// 	std::map<std::string, std::string> _channels;
+// 	Display disp(&_channels, &_users);
+// 	// Display disp;
+// 	_channels.insert(std::pair<std::string, std::string>("chan", "chan"));
+// 	_users.insert(std::pair<std::string, std::string>("Gaubert", "Guillaume"));
+// 	disp.addMessage("1");
+// 	usleep(500000);
+// 	_channels.insert(std::pair<std::string, std::string>("4aaaaaaaaaaaaaaaa", "4"));
+// 	_users.insert(std::pair<std::string, std::string>("1aaaaaaaaaaaaaaa", "1"));
+// 	_users.insert(std::pair<std::string, std::string>("2", "2"));
+// 	disp.addMessage("2");
+// 	// usleep(500000);
+// 	// _channels.insert(std::pair<std::string, std::string>("5", "5"));
+// 	// _channels.insert(std::pair<std::string, std::string>("3", "3"));
+// 	// disp.addMessage("3");
+// 	// usleep(500000);
+// 	// _users.insert(std::pair<std::string, std::string>("3", "3"));
+// 	// _users.insert(std::pair<std::string, std::string>("4", "4"));
+// 	// disp.addMessage("4");
+// 	// usleep(500000);
+// 	// _channels.insert(std::pair<std::string, std::string>("2", "2"));
+// 	// disp.addMessage("5");
+// 	// usleep(500000);
+// 	// _channels.insert(std::pair<std::string, std::string>("1", "1"));
+// 	// _users.insert(std::pair<std::string, std::string>("5", "5"));
+// 	// _users.insert(std::pair<std::string, std::string>("6", "6"));
+// 	// disp.addMessage("6");
+// 	// usleep(500000);
+// 	// disp.addMessage("7");
+// 	// usleep(500000);
+// 	// _channels.insert(std::pair<std::string, std::string>("6", "6"));
+// 	// disp.addMessage("8");
+// }
