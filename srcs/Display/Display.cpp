@@ -83,6 +83,8 @@ void Display::addMessage(std::string msg)
 {
 	if (_fancyMode)
 	{
+		if (msg.back() == '\n')
+			msg.pop_back();
 		if (_messages.size() == 20)
 		{
 			_messages.erase(_messages.begin());
