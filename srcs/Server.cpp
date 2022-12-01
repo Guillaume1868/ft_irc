@@ -46,6 +46,8 @@ void Server::listen()
 		std::cout << "Error: binding failed" << std::endl;
 		//kill server function;
 	}
+	int flags = fcntl(_socket, F_GETFL, 0);
+    	fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
 	freeaddrinfo(servinfo);
 	if (::listen(_socket, SOMAXCONN) == -1)
 		std::cout << "Error: listening failed" << std::endl;
@@ -75,12 +77,29 @@ void	Server::pollLoop()
 				}
 				else if (i > 0)
 				{
-					char buffer[500];
+					char buffer[4096];
+					int n;
+					int end = -1;
 
 					memset(buffer, '\0', sizeof(buffer));
-					if (recv(_users[i - 1]->getFd(), buffer, sizeof(buffer), 0) <= 0)
-							break;
-					std::cout << "Message:" << buffer;
+					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
+					if (n > 0)
+						_users[i - 1]->_msgBuffer += buffer;
+        				while(_users[i - 1]->_msgBuffer[++end])
+            					;
+    					if (_users[i - 1]->_msgBuffer[end - 1] == '\n')
+					{
+						if ((_users[i - 1]->_msgBuffer).find("\r\n", 0) != std::string::npos)
+						{
+							std::cout << "Message:" << _users[i - 1]->_msgBuffer;
+							(_users[i - 1]->_msgBuffer).clear();
+						}
+						else
+						{
+							std::cout << "Message from NC:" << _users[i - 1]->_msgBuffer;
+							(_users[i - 1]->_msgBuffer).clear();
+						}
+					}
 				}
 			}
 		}

@@ -15,11 +15,10 @@ class User
 	std::string	_nickname;
 	std::string	_password;	
 	bool		_isAuth;
-	std::string	_msgSent;
-	std::string	_msgReceived;
   public:
 	User(int &fd);
 	~User();
+	std::string	_msgBuffer;
 	void		setUsername(std::string username);
 	void		setNickname(std::string nickname);
 	void		setPassword(std::string password);
