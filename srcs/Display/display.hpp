@@ -3,14 +3,15 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "../Channel.hpp"
 
 class Display
 {
 public:
-	Display(std::map<std::string, std::string> *pChanPtr, std::map<std::string, std::string> *pUsrPtr);
 	Display();
 	~Display();
 	void update();
+	void setup(std::map<std::string, Channel> *pChanPtr, std::vector<User> *pUsrPtr);
 	void addMessage(std::string msg);
 	void addError(std::string msg);
 	std::string color(uint8_t r, uint8_t g, uint8_t b);
@@ -20,7 +21,7 @@ private:
 	bool _fancyMode;
 	std::string trunc(std::string str, int len);
 	std::vector<std::string> _messages;
-	std::map<std::string, std::string> *_users;
-	std::map<std::string, std::string> *_channels;
+	std::vector<User> *_users;
+	std::map<std::string, Channel> *_channels;
 };
 #endif

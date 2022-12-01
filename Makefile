@@ -1,6 +1,6 @@
 NAME 	=	ircserv
 
-FILES	=	main Server User Display/Display
+FILES	=	main Server User Display/Display Channel
 
 SRC		=	$(addprefix srcs/, $(FILES:$(FILE_EXTENSION)=.c))
 OBJ		=	$(addprefix objs/, ${FILES:$(FILE_EXTENSION)=.o})

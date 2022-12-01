@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "Display.hpp"
 #include <unistd.h>
+#include "../Channel.hpp"
 
 std::string Display::trunc(std::string str, int len)
 {
@@ -46,7 +47,7 @@ void Display::update()
 		// Display channel list
 		// Put cursor topright (col 50)
 		std::cout << "\033[1;50H" << color(135, 109, 190) << "Channels :" << color() << std::endl;
-		for (std::map<std::string, std::string>::iterator it = _channels->begin(); it != _channels->end(); ++it)
+		for (std::map<std::string, Channel>::iterator it = _channels->begin(); it != _channels->end(); ++it)
 		{
 			if (std::distance(_channels->begin(), it) >= 4)
 			{
@@ -58,14 +59,14 @@ void Display::update()
 		// Display user list
 		// Put cursor topright (col 66)
 		std::cout << "\033[1;66H" << color(135, 109, 190) << "Users :" << color() << std::endl;
-		for (std::map<std::string, std::string>::iterator it = _users->begin(); it != _users->end(); ++it)
+		for (std::vector<User>::iterator it = _users->begin(); it != _users->end(); ++it)
 		{
 			if (std::distance(_users->begin(), it) >= 4)
 			{
 				std::cout << "\033[6;66H" << color(244, 202, 105) << std::distance(it, _users->end()) << " more" << color() << std::endl;
 				break;
 			}
-			std::cout << "\033[" << std::distance(_users->begin(), it) + 2 << ";66H" << trunc((*it).first, 15) << std::endl;
+			std::cout << "\033[" << std::distance(_users->begin(), it) + 2 << ";66H" << trunc((*it).getNickname(), 15) << std::endl;
 		}
 
 		// Display message list
@@ -113,17 +114,21 @@ void Display::addError(std::string msg)
 	}
 }
 
-Display::Display(std::map<std::string, std::string> *pChanPtr, std::map<std::string, std::string> *pUsrPtr)
+void Display::setup(std::map<std::string, Channel> *pChanPtr, std::vector<User> *pUsrPtr)
 {
-	this->_channels = pChanPtr;
+    this->_channels = pChanPtr;
 	this->_users = pUsrPtr;
-	_fancyMode = 1;
+    if(this->_channels && this->_users)
+        _fancyMode = 1;
 }
 
 Display::Display()
 {
+    this->_channels = 0;
+	this->_users = 0;
 	_fancyMode = 0;
 }
+
 Display::~Display()
 {
 	// Display cursor
