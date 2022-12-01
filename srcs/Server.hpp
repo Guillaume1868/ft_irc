@@ -17,6 +17,11 @@
 #include "User.hpp"
 #include "Channel.hpp"
 #include "Display/Display.hpp"
+#include "ACommand.hpp"
+#include "Command/Ping.hpp"
+
+class ACommand;
+
 class Server
 {
   private:
@@ -27,6 +32,7 @@ class Server
 	std::vector<pollfd>		_pfds;
 	std::vector<User>		_users;
 	std::map<std::string, Channel>	_channels;
+	std::map<std::string, ACommand*>	_commands;
   public:
 	Server(std::string host, std::string port, std::string password);
 	~Server();

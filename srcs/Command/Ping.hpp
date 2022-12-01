@@ -1,10 +1,14 @@
+#pragma once
 #include "../ACommand.hpp"
 #include "../Channel.hpp"
+#include "../Server.hpp"
 
-class PING : public ACommand
+class Server;
+
+class Ping : public ACommand
 {
     public:
-        PING(Server *serv);
-        ~PING();
-        int     execute(Client &clicli, std::vector<std::string> args);
+        Ping(Server *serv);
+        ~Ping();
+        int     execute(User &user, std::vector<std::string> args);
 };

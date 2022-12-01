@@ -1,5 +1,4 @@
 #include "Server.hpp"
-#include "User.hpp"
 
 #include <vector>
 
@@ -8,6 +7,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	display.setup(&_channels, &_users);
 	display.update();
 	listen();
+	_commands["PING"] = new Ping(this);
 	pollLoop(); //testing
 }
 
