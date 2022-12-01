@@ -7,7 +7,7 @@ classDiagram
     Server --* User
     Server : -Map~String, aCommand~ _commands
     Server : -Map~String, Channel~ _channels
-    Server : -Map~String username, User~ _users
+    Server : -Vector~User~ _users
     Server : -String _password
     Server : +getUsernameFromNick(String nick)
     class Channel{
