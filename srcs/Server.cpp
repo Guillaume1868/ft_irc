@@ -7,7 +7,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	display.setup(&_channels, &_users);
 	display.update();
 	listen();
-	_commands["PING"] = new Ping(this);
+	_commands["Ping"] = new Ping(this);
 	pollLoop(); //testing
 }
 
@@ -103,6 +103,13 @@ void	Server::pollLoop()
 						{
 							display.addMessage("Message from NC:" + _users[i - 1]._msgBuffer);
 							(_users[i - 1]._msgBuffer).clear();
+				
+std::map<std::string, ACommand*>::iterator it = _commands.find("Ping");
+	if (it != _commands.end()) {
+		ACommand *command = it->second;
+			command->execute(_users[i - 1], parser(_users[i - 1]._msgBuffer, " "));
+	}
+
 						}
 					}
 				}
