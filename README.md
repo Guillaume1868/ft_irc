@@ -12,7 +12,7 @@ classDiagram
     Server : +getUsernameFromNick(String nick)
     class Channel{
         -String _name
-        -Vector~<User*~ _connectedUsers
+        -Vector~User*~ _connectedUsers
         -Vector~String username~ _operatorUsers
         -Vector~String username~ _bannedUsers
         +operator<<(String msg)
