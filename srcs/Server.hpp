@@ -17,7 +17,6 @@
 #include "User.hpp"
 #include "Channel.hpp"
 #include "Display/Display.hpp"
-#include "ACommand.hpp"
 #include "Command/Ping.hpp"
 
 class ACommand;

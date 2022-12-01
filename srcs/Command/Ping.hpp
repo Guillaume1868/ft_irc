@@ -1,9 +1,5 @@
 #pragma once
 #include "../ACommand.hpp"
-#include "../Channel.hpp"
-#include "../Server.hpp"
-
-class Server;
 
 class Ping : public ACommand
 {

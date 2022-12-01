@@ -1,5 +1,4 @@
 #pragma once
-#include "Server.hpp"
 #include "Channel.hpp"
 
 class Server;
