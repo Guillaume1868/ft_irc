@@ -61,7 +61,10 @@ void	Server::pollLoop()
 	while (1)
 	{
 		if (poll(_pfds.data(), _pfds.size(), -1) == -1)
-			throw std::runtime_error("error: poll");
+		{
+			std::cout << "Error: poll" << std::endl;
+			//kill server function;
+		}
 		for (size_t i = 0; i < _pfds.size(); i++)
 		{
 			if (_pfds[i].revents & POLLIN)
