@@ -12,8 +12,10 @@
 #include <netdb.h>
 #include <poll.h>
 #include <vector>
+#include <map>
 
 #include "User.hpp"
+#include "Channel.hpp"
 
 class Server
 {
@@ -23,14 +25,15 @@ class Server
 	std::string			_port;
 	std::string			_pass;
 	std::vector<pollfd>		_pfds;
-	std::vector<User *>		_users;
+	std::vector<User>		_users;
 	std::map<std::string, Channel>	_channels;
   public:
 	Server(std::string host, std::string port, std::string password);
 	~Server();
-	void	listen();
-	void	pollLoop();
-	int                 _socket;
+	void		listen();
+	void		pollLoop();
+	int		_socket;
+	std::vector<std::string>     parser(std::string input, std::string delimiter);
 };
 
 #endif

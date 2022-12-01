@@ -74,7 +74,7 @@ void	Server::pollLoop()
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
 						throw std::runtime_error("error: accept");
-					_users.push_back(new User(new_fd));
+					_users.push_back(*(new User(new_fd)));
 					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
 					_pfds.push_back(pfd);
 				}
@@ -85,22 +85,28 @@ void	Server::pollLoop()
 					int end = -1;
 
 					memset(buffer, '\0', sizeof(buffer));
-					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
+					n = read(_users[i - 1].getFd(), buffer, sizeof(buffer));
 					if (n > 0)
-						_users[i - 1]->_msgBuffer += buffer;
- 	      				while(_users[i - 1]->_msgBuffer[++end])
+						_users[i - 1]._msgBuffer += buffer;
+ 	      				while(_users[i - 1]._msgBuffer[++end])
             					;
-    					if (_users[i - 1]->_msgBuffer[end - 1] == '\n')
+    					if (_users[i - 1]._msgBuffer[end - 1] == '\n')
 					{
-						if ((_users[i - 1]->_msgBuffer).find("\r\n", 0) != std::string::npos)
+						if ((_users[i - 1]._msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
-							std::cout << "Message:" << _users[i - 1]->_msgBuffer;
-							(_users[i - 1]->_msgBuffer).clear();
+							std::cout << "Message:" << _users[i - 1]._msgBuffer;
+							(_users[i - 1]._msgBuffer).clear();
 						}
 						else
 						{
-							std::cout << "Message from NC:" << _users[i - 1]->_msgBuffer;
-							(_users[i - 1]->_msgBuffer).clear();
+							std::cout << "Message from NC:" << _users[i - 1]._msgBuffer;
+							std::cout << "Parsed :\n";
+							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
+							for (std::vector<std::string>::iterator i = parsed.begin(); i != parsed.end(); i++)
+							{
+								std::cout << (*i) << std::endl;
+							}
+							(_users[i - 1]._msgBuffer).clear();
 						}
 					}
 				}
@@ -109,8 +115,14 @@ void	Server::pollLoop()
 	}
 }
 
-/*std::vector	Server::parser(std::string)
+std::vector<std::string>	Server::parser(std::string input, std::string delimiter)
 {
-	std::vector	tmp;
-	for (
-}*/
+	std::vector<std::string>	tmp;
+	std::string		 	tmpDelimiter = delimiter;
+	while (input.length() > 0)
+	{
+		std::string element = input.substr(0, input.find(tmpDelimiter));
+		tmp.push_back(element);
+	}
+	return (tmp);
+}

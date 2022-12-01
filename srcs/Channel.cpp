@@ -23,7 +23,7 @@ void	Channel::joinChannel(User *user)
 
 User	*Channel::getUserByNick(std::string nick)
 {
-	for (std::vector<User *>::iterator i = _usersChan.begin(); i != _connectedUsers.end(); i++)
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
 	{
 		if ((*i)->getNickname() == nick)
 			return (*i);
@@ -33,7 +33,7 @@ User	*Channel::getUserByNick(std::string nick)
 
 User	*Channel::getUserByUsername(std::string username)
 {
-	for (std::vector<User *>::iterator i = _usersChan.begin(); i != _connectedUsers.end(); i++)
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
 	{
 		if ((*i)->getUsername() == username)
 			return (*i);
