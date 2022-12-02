@@ -45,6 +45,7 @@ class Server
 	void				sendMsg(std::string name, std::string msg);
 	void				findCommand(std::vector<std::string> args, size_t user_i);
 	std::vector<std::string>	parser(std::string input, std::string delimiter);
+	std::string			getPassword();
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "Command/Ping.hpp"
 #include "Command/Pass.hpp"
+#include "Command/Mode.hpp"
 
 #include <vector>
 
@@ -13,6 +14,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	listen();
 	_commands["PING"] = new Ping(this);
 	_commands["PASS"] = new Pass(this);
+	_commands["MODE"] = new Mode(this);
 	pollLoop();
 }
 
@@ -122,6 +124,7 @@ void	Server::pollLoop()
 
 void	Server::findCommand(std::vector<std::string> args, size_t user_i)
 {
+	std::cout << args.front() << std::endl;
 	std::map<std::string, ACommand*>::iterator i = _commands.find(args.front());
 	if (i != _commands.end())
 	{
@@ -185,4 +188,9 @@ void	Server::sendMsg(User *user, std::string msg)
 		b_sent = send(user->getFd(), &msg[b_sent], msg.size() - total_b_sent, 0);
 		total_b_sent += b_sent;
 	}
+}
+
+std::string	Server::getPassword()
+{
+	return (_pass);
 }

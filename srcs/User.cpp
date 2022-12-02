@@ -4,7 +4,7 @@
 User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
 {
 	std::cout << "New User on FD " << _fd << std::endl;
-	_isAuth = 1;
+	_isAuth = 0;
 }
 
 User::~User(void)
@@ -32,8 +32,8 @@ void	User::setPassword(std::string password)
 
 void	User::setAuth()
 {
-	if (_username.length() > 0 && _nickname.length() > 0 /*&& _password = _serv.password*/)
-		_isAuth = 0;
+	if (_username.length() > 0 && _nickname.length() > 0 && _password == _serv->getPassword())
+		_isAuth = 1;
 }
 
 int	User::getFd()
