@@ -46,6 +46,7 @@ class Server
 	void				findCommand(std::vector<std::string> args, size_t user_i);
 	std::vector<std::string>	parser(std::string input, std::string delimiter);
 	std::string			getPassword();
+	 Channel			*findChannel(std::string name);
 };
 
 #endif

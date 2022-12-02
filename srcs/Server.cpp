@@ -124,7 +124,6 @@ void	Server::pollLoop()
 
 void	Server::findCommand(std::vector<std::string> args, size_t user_i)
 {
-	std::cout << args.front() << std::endl;
 	std::map<std::string, ACommand*>::iterator i = _commands.find(args.front());
 	if (i != _commands.end())
 	{
@@ -144,7 +143,7 @@ std::vector<std::string>	Server::parser(std::string input, std::string delimiter
 		input.erase(0, pos + 1);
 		tmp.push_back(token);
 	}
-	tmp.push_back(input);
+	tmp.push_back(input.erase(input.length() - 1, 1));
 	return (tmp);
 }
 
@@ -193,4 +192,14 @@ void	Server::sendMsg(User *user, std::string msg)
 std::string	Server::getPassword()
 {
 	return (_pass);
+}
+
+Channel	*Server::findChannel(std::string name)
+{
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
+	{
+		if ((*i).second.getChanName() == name)
+			return (&(*i).second);
+	}
+	return 0;
 }
