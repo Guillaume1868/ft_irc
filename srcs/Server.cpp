@@ -197,3 +197,13 @@ std::string	Server::getPassword()
 {
 	return (_pass);
 }
+
+Channel	*Server::findChannel(std::string name)
+{
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
+	{
+		if ((*i).second.getChanName() == name)
+			return (&(*i).second);
+	}
+	return 0;
+}

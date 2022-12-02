@@ -3,3 +3,4 @@ ircserv
 a.out
 .vscode/settings.json
 .vscode/c_cpp_properties.json
+*.swp
