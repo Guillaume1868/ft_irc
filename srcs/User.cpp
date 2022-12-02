@@ -1,5 +1,6 @@
 #include "User.hpp"
 
+extern Display display;
 
 User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
 {
@@ -41,7 +42,7 @@ void	User::setAuth()
 	if (_username.length() > 0 && _nickname.length() > 0 && _password == _serv->getPassword() && _host.length() > 0)
 	{
 		_isAuth = 1;
-		this->sendMsg(":Welcome to the Internet Relay Network " + this->getNickname() + "!" + this->getUsername() + "@" + this->getHost() + "\n\r");
+		this->sendMsg(":0 001 " + this->getNickname() + " :Welcome to the Internet Relay Network, " + this->getNickname() /*+ "!" + this->getUsername() + "@" + this->getHost() */+ "\r\n");
 	}
 }
 

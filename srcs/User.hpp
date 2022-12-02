@@ -19,7 +19,7 @@ class User
 	std::string	_username;
 	std::string	_nickname;
 	std::string	_password;	
-	std::string _host;
+	std::string	_host;
 	bool		_isAuth;
   public:
 	User(int &fd, Server *serv);

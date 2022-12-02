@@ -147,7 +147,10 @@ std::vector<std::string>	Server::parser(std::string input, std::string delimiter
 		input.erase(0, pos + 1);
 		tmp.push_back(token);
 	}
-	tmp.push_back(input.erase(input.length() - 1, 1));
+	input.erase(input.length() - 1, 1);
+	if (input.find('\r') != std::string::npos)
+		input.erase(input.length() - 1, 1);
+	tmp.push_back(input);
 	return (tmp);
 }
 
@@ -180,6 +183,7 @@ void	Server::sendMsg(std::string name, std::string msg)
 		b_sent = send(findFdByNickname(name), &msg[b_sent], msg.size() - total_b_sent, 0);
 		total_b_sent += b_sent;
 	}
+	display.addMessage(" < " + msg);
 }
 
 void	Server::sendMsg(User *user, std::string msg)
@@ -191,6 +195,7 @@ void	Server::sendMsg(User *user, std::string msg)
 		b_sent = send(user->getFd(), &msg[b_sent], msg.size() - total_b_sent, 0);
 		total_b_sent += b_sent;
 	}
+	display.addMessage(" < " + msg);
 }
 
 std::string	Server::getPassword()
