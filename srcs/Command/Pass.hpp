@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PASS_HPP
+#define PASS_HPP
 #include "../ACommand.hpp"
 
 class Pass : public ACommand
@@ -8,3 +9,4 @@ class Pass : public ACommand
         ~Pass();
         int     execute(User &user, std::vector<std::string> args);
 };
+#endif

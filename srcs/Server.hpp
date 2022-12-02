@@ -1,5 +1,5 @@
-#ifndef SERVER_H
-#define SERVER_H
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <iostream>
 #include <string>
@@ -17,9 +17,9 @@
 #include "User.hpp"
 #include "Channel.hpp"
 #include "Display/Display.hpp"
-#include "Command/Ping.hpp"
-#include "Command/Pass.hpp"
+#include "ACommand.hpp"
 
+class Channel;
 class ACommand;
 
 class Server

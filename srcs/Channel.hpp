@@ -1,9 +1,11 @@
-#ifndef CHANNEL_H
-#define CHANNEL_H
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
 
 #include "User.hpp"
 
 #include <vector>
+
+class User;
 
 class Channel
 {

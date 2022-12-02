@@ -5,6 +5,9 @@
 #include <map>
 #include "../Channel.hpp"
 
+class Channel;
+class User;
+
 class Display
 {
 public:

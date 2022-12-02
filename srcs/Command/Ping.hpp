@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PING_HPP
+#define PING_HPP
 #include "../ACommand.hpp"
 
 class Ping : public ACommand
@@ -8,3 +9,4 @@ class Ping : public ACommand
         ~Ping();
         int     execute(User &user, std::vector<std::string> args);
 };
+#endif
