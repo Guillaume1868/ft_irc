@@ -63,5 +63,5 @@ bool	User::getIsAuth()
 
 void	User::sendMsg(std::string msg)
 {
-	(void)msg;
+	_serv->sendMsg(this, msg);
 }
