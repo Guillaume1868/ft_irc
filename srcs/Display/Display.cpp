@@ -71,11 +71,10 @@ void Display::update()
 
 		// Display message list
 		// Put cursor to correct line
-		std::cout << color(255,255,255);
 		std::cout << "\033[6;1H" << std::endl;
 		for (std::vector<std::string>::iterator it = _messages.begin(); it != _messages.end(); ++it)
 		{
-			std::cout << *it << std::endl;
+			std::cout << color(255,255,255) << *it << std::endl;
 		}
 	}
 }
