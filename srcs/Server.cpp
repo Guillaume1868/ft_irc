@@ -99,14 +99,14 @@ void	Server::pollLoop()
 					{
 						if ((_users[i - 1]._msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
-							display.addMessage("Message:" + _users[i - 1]._msgBuffer);
+							display.addMessage(" > " + _users[i - 1]._msgBuffer);
 							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
 							findCommand(parsed, i);
 							(_users[i - 1]._msgBuffer).clear();
 						}
 						else
 						{
-							display.addMessage("Message from NC:" + _users[i - 1]._msgBuffer);
+							display.addMessage(display.color(0,0,255) + " > " + display.color(255,255,255) + _users[i - 1]._msgBuffer);
 							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
 							findCommand(parsed, i);
 							(_users[i - 1]._msgBuffer).clear();
