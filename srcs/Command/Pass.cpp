@@ -11,9 +11,14 @@ Pass::~Pass()
 {
 }
 
+//<command> :Not enough parameters
 int	Pass::execute(User &user, std::vector<std::string> args)
 {
-	display.addMessage(args[1]);
+	user.sendMsg("nique");
+	if (user.getIsAuth())
+		user.sendMsg(":You may not reregister");
+	if (args.size() < 2)
+		user.sendMsg("PASS :Not enough parameters");
 	user.setPassword(args[1]);
     return 0;
 }
