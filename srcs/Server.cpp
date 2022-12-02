@@ -1,4 +1,6 @@
 #include "Server.hpp"
+#include "Command/Ping.hpp"
+#include "Command/Pass.hpp"
 
 #include <vector>
 
@@ -79,7 +81,7 @@ void	Server::pollLoop()
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
 						throw std::runtime_error("error: accept");
-					_users.push_back(*(new User(new_fd)));
+					_users.push_back(*(new User(new_fd, this)));
 					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
 					_pfds.push_back(pfd);
 				}

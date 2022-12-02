@@ -1,7 +1,7 @@
 #include "User.hpp"
 
 
-User::User(int &fd) : _fd(fd)
+User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
 {
 	std::cout << "New User on FD " << _fd << std::endl;
 	_isAuth = 1;
@@ -59,4 +59,9 @@ std::string	User::getPassword()
 bool	User::getIsAuth()
 {
 	return (_isAuth);
+}
+
+void	User::sendMsg(std::string msg)
+{
+	(void)msg;
 }

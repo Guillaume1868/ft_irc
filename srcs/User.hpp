@@ -1,14 +1,19 @@
-#ifndef USER_H
-#define USER_H
+#ifndef USER_HPP
+#define USER_HPP
 
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "Server.hpp"
 
 #include <sys/socket.h>
 
+class Server;
+
 class User
 {
+	protected:
+		Server *	_serv;
   private:
 	int		_fd;
 	std::string	_username;
@@ -16,7 +21,7 @@ class User
 	std::string	_password;	
 	bool		_isAuth;
   public:
-	User(int &fd);
+	User(int &fd, Server *serv);
 	~User();
 	std::string	_msgBuffer;
 	void		setUsername(std::string username);
@@ -28,6 +33,7 @@ class User
 	std::string	getNickname();
 	std::string	getPassword();
 	bool		getIsAuth();
+	void		sendMsg(std::string msg);
 };
 
 #endif
