@@ -15,8 +15,9 @@ int	Pass::execute(User &user, std::vector<std::string> args)
 {
 	if (user.getIsAuth())
 		user.sendMsg(":You may not reregister\r\n");
-	if (args.size() < 2)
+	else if (args.size() < 2)
 		user.sendMsg("PASS :Not enough parameters\r\n");
-	user.setPassword(args[1]);
+	else
+		user.setPassword(args[1]);
     return 0;
 }
