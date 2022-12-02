@@ -2,6 +2,8 @@
 #include "Command/Ping.hpp"
 #include "Command/Pass.hpp"
 #include "Command/Mode.hpp"
+#include "Command/Nick.hpp"
+#include "Command/UserCmd.hpp"
 
 #include <vector>
 
@@ -15,6 +17,8 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["PING"] = new Ping(this);
 	_commands["PASS"] = new Pass(this);
 	_commands["MODE"] = new Mode(this);
+	_commands["NICK"] = new Nick(this);
+	_commands["USER"] = new UserCmd(this);
 	pollLoop();
 }
 

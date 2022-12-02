@@ -30,10 +30,19 @@ void	User::setPassword(std::string password)
 	setAuth();
 }
 
+void	User::setHost(std::string host)
+{
+	this->_host = host;
+	setAuth();
+}
+
 void	User::setAuth()
 {
-	if (_username.length() > 0 && _nickname.length() > 0 && _password == _serv->getPassword())
+	if (_username.length() > 0 && _nickname.length() > 0 && _password == _serv->getPassword() && _host.length() > 0)
+	{
 		_isAuth = 1;
+		this->sendMsg(":Welcome to the Internet Relay Network " + this->getNickname() + "!" + this->getUsername() + "@" + this->getHost() + "\n\r");
+	}
 }
 
 int	User::getFd()
@@ -54,6 +63,11 @@ std::string	User::getNickname()
 std::string	User::getPassword()
 {
 	return (_password);
+}
+
+std::string	User::getHost()
+{
+	return (_host);
 }
 
 bool	User::getIsAuth()

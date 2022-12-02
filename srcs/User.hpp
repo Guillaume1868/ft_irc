@@ -19,6 +19,7 @@ class User
 	std::string	_username;
 	std::string	_nickname;
 	std::string	_password;	
+	std::string _host;
 	bool		_isAuth;
   public:
 	User(int &fd, Server *serv);
@@ -27,11 +28,13 @@ class User
 	void		setUsername(std::string username);
 	void		setNickname(std::string nickname);
 	void		setPassword(std::string password);
+	void		setHost(std::string host);
 	void		setAuth();
 	int		getFd();
 	std::string	getUsername();
 	std::string	getNickname();
 	std::string	getPassword();
+	std::string	getHost();
 	bool		getIsAuth();
 	void		sendMsg(std::string msg);
 };
