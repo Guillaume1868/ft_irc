@@ -21,7 +21,7 @@ int	UserCmd::execute(User &user, std::vector<std::string> args)
 	else
 	{
 		user.setNickname(args[1]);
-		user.setHost(args[2]);
+		user.setHost(args[2].erase(0,1));
 		user.setUsername(args[4]);
 	}	
 	return 0;
