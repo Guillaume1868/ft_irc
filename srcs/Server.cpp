@@ -4,6 +4,7 @@
 #include "Command/Mode.hpp"
 #include "Command/Nick.hpp"
 #include "Command/UserCmd.hpp"
+#include "Command/Join.hpp"
 
 #include <vector>
 
@@ -19,6 +20,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["MODE"] = new Mode(this);
 	_commands["NICK"] = new Nick(this);
 	_commands["USER"] = new UserCmd(this);
+	_commands["JOIN"] = new Join(this);
 	pollLoop();
 }
 
@@ -211,4 +213,9 @@ Channel	*Server::findChannel(std::string name)
 			return (&(*i).second);
 	}
 	return 0;
+}
+
+void    Server::addChannel(std::string name)
+{
+	_channels.insert(std::make_pair(name, Channel(name)));
 }

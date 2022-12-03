@@ -15,7 +15,8 @@ int	Mode::execute(User &user, std::vector<std::string> args)
 {
 	(void)user;
 	int	mode = 42;
-
+	if (args.size() != 3)
+		return (1);
 	if (args[2].front() == '+')
 		mode = 0;
 	else if (args[2].front() == '-')

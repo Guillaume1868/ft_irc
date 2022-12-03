@@ -1,6 +1,8 @@
 #include "Channel.hpp"
 #include "User.hpp"
 
+extern Display display;
+
 Channel::Channel(std::string name) : _chanName(name), _maxUsers(100)
 {
 
@@ -119,4 +121,25 @@ bool            Channel::isOp(std::string name)
 			return(0);
 	}
 	return(1);
+}
+
+void		Channel::msgToAllUsers(std::string msg)
+{
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
+	{
+		(*i)->sendMsg(msg);
+	}
+}
+
+std::string	Channel::getUserList()
+{
+	std::string answer;
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
+	{
+		if (isOp((*i)->getNickname()) == 0)
+			answer += "@";
+		answer += ((*i)->getNickname());
+		answer += " ";
+	}
+	return (answer);
 }
