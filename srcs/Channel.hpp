@@ -37,6 +37,7 @@ class Channel
 	bool            isOp(std::string name);
 	void		msgToAllUsers(std::string msg);
 	std::string     getUserList();
+	bool		chanIsFull();
 };
 
 #endif
