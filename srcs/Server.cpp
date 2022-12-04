@@ -5,6 +5,8 @@
 #include "Command/Nick.hpp"
 #include "Command/UserCmd.hpp"
 #include "Command/Join.hpp"
+#include "Command/Privmsg.hpp"
+#include "Command/Quit.hpp"
 
 #include <vector>
 
@@ -21,6 +23,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["NICK"] = new Nick(this);
 	_commands["USER"] = new UserCmd(this);
 	_commands["JOIN"] = new Join(this);
+	_commands["QUIT"] = new Quit(this);
 	pollLoop();
 }
 
@@ -218,4 +221,29 @@ Channel	*Server::findChannel(std::string name)
 void    Server::addChannel(std::string name)
 {
 	_channels.insert(std::make_pair(name, Channel(name)));
+}
+
+void	Server::delUser(std::string name)
+{
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
+	{
+		(*i).second.delUser(name);
+	}
+
+	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); ++i)
+	{
+		if ((*i).getNickname() == name)
+		{
+			_users.erase(i);
+			break ;
+		}
+	}
+	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); ++i)
+	{
+		if ((*i).fd == findFdByUsername(name))
+		{
+			_pfds.erase(i);
+			break ;
+		}
+	}
 }

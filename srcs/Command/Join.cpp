@@ -13,14 +13,14 @@ Join::~Join()
 
 int	Join::execute(User &user, std::vector<std::string> args)
 {
-	if (args[1].find_first_not_of("abcdefghijklmnopqrstuvwxyz1234567890", 0) != std::string::npos)
+	if (args[1].front() != '#' || args[1].substr(1, args[1].length() - 1).find_first_not_of("abcdefghijklmnopqrstuvwxyz1234567890", 0) != std::string::npos)
 	{
-		user.sendMsg(":0 403 " + user.getNickname() + " " + args[1] + " :No such channel\n");
+		user.sendMsg(":0 403 " + user.getNickname() + " " + args[1] + " :No such channel\r\n");
 		return 1;
 	}
 	if (args.size() < 2)
 	{
-		user.sendMsg(":0 461 JOIN :Not enough parameters");
+		user.sendMsg(":0 461 JOIN :Not enough parameters\r\n");
 	}
 
 	Channel *chan = (_serv->findChannel(args[1]));
@@ -30,7 +30,7 @@ int	Join::execute(User &user, std::vector<std::string> args)
 		chan = (_serv->findChannel(args[1]));
 		if (chan->chanIsFull() == 0)
 		{
-			user.sendMsg(":0  471 " + args[1] + " :Cannot join channel (+l)");
+			user.sendMsg(":0  471 " + args[1] + " :Cannot join channel (+l)\r\n");
 			return 1;
 		}
 		chan->addOpUser(user.getNickname());
@@ -41,12 +41,12 @@ int	Join::execute(User &user, std::vector<std::string> args)
 	{
 		if (chan->chanIsFull() == 0)
 		{
-			user.sendMsg(":0  471 " + args[1] + " :Cannot join channel (+l)");
+			user.sendMsg(":0  471 " + args[1] + " :Cannot join channel (+l)\r\n");
 			return 1;
 		}
 		if (chan->isBanned(user.getNickname()) == 0)
 		{
-			user.sendMsg(":0 474 " + args[1] + " :Cannot join channel (+b)");
+			user.sendMsg(":0 474 " + args[1] + " :Cannot join channel (+b)\r\n");
 		}
 		chan->joinChannel(&user);
 		chan->msgToAllUsers(":" + user.getNickname() + " JOIN :" + chan->getChanName() + "\r\n");

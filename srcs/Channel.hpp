@@ -21,6 +21,7 @@ class Channel
 	Channel(std::string name, std::string password);
 	~Channel();
 	void		joinChannel(User *user);
+	void		delUser(std::string name);
 	User		*getUserByNick(std::string nick);
 	User		*getUserByUsername(std::string username);
 	bool		passIsValid(std::string password);
@@ -36,6 +37,7 @@ class Channel
 	void            delOpUser(std::string name);
 	bool            isOp(std::string name);
 	void		msgToAllUsers(std::string msg);
+	void            privmsgToAllUsers(User &user, std::string msg);
 	std::string     getUserList();
 	bool		chanIsFull();
 };

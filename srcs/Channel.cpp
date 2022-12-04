@@ -20,7 +20,18 @@ Channel::~Channel(void)
 void	Channel::joinChannel(User *user)
 {
 	_connectedUsers.push_back(user);
-	std::cout << "User: " << user->getNickname() << " Joined: " << this->getChanName() << std::endl;
+}
+
+void	Channel::delUser(std::string name)
+{
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); ++i)
+	{
+		if ((*i)->getNickname() == name)
+		{
+			_connectedUsers.erase(i);
+			break;
+		}
+	}
 }
 
 User	*Channel::getUserByNick(std::string nick)
@@ -128,6 +139,14 @@ void		Channel::msgToAllUsers(std::string msg)
 	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
 	{
 		(*i)->sendMsg(msg);
+	}
+}
+
+void		Channel::privmsgToAllUsers(User &user, std::string msg)
+{
+	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
+	{
+		(*i)->sendMsg(":" + user.getNickname() + " PRIVMSG " + (*i)->getNickname() + " :" + msg);
 	}
 }
 

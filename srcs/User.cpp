@@ -1,16 +1,24 @@
 #include "User.hpp"
 
+#include <sstream>
+
 extern Display display;
 
 User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
 {
-	std::cout << "New User on FD " << _fd << std::endl;
+	std::string result;		//
+	std::ostringstream convert;	// used to convert int to std::string
+	convert << _fd;			// because std::to_string is cpp11
+	result = convert.str();		//
+	
+	display.addMessage("New User on FD " + result);
 	_isAuth = 0;
 }
 
 User::~User(void)
 {
-	//close(_fd);
+	close(_fd);
+	_fd = -1;
 }
 
 void	User::setUsername(std::string username)
@@ -42,7 +50,7 @@ void	User::setAuth()
 	if (_username.length() > 0 && _nickname.length() > 0 && _password == _serv->getPassword() && _host.length() > 0)
 	{
 		_isAuth = 1;
-		this->sendMsg(":0 001 " + this->getNickname() + " :Welcome to the Internet Relay Network, " + this->getNickname() /*+ "!" + this->getUsername() + "@" + this->getHost() */+ "\r\n");
+		this->sendMsg(":0 001 " + this->getNickname() + " :Welcome to the Internet Relay Network, " + this->getNickname() + "\r\n");
 	}
 }
 
