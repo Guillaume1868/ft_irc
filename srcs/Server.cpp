@@ -92,7 +92,8 @@ void	Server::pollLoop()
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
 						throw std::runtime_error("error: accept");
-					_users.push_back(*(new User(new_fd, this)));
+					User tmp(new_fd, this);
+					_users.push_back(tmp);
 					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
 					_pfds.push_back(pfd);
 				}
@@ -229,20 +230,23 @@ void	Server::delUser(std::string name)
 	{
 		(*i).second.delUser(name);
 	}
+	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); i++)
+	{
+		if ((*i).fd == findFdByUsername(name))
+		{
+display.addMessage("Debug: i.fd = " + std::to_string((*i).fd) + " /// Debug: userFd = " + std::to_string(findFdByUsername(name)) + "\n");
+			_pfds.erase(i);
+			break ;
+		}
+	}
 
 	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); ++i)
 	{
 		if ((*i).getNickname() == name)
 		{
+display.addMessage("User on FD " + std::to_string((*i).getFd()) + " closed the connexion\r\n");
+			close((*i).getFd());
 			_users.erase(i);
-			break ;
-		}
-	}
-	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); ++i)
-	{
-		if ((*i).fd == findFdByUsername(name))
-		{
-			_pfds.erase(i);
 			break ;
 		}
 	}
