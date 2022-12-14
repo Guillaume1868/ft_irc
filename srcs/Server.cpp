@@ -227,27 +227,28 @@ void    Server::addChannel(std::string name)
 
 void	Server::delUser(std::string name)
 {
+// Delete user from all channels
 	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
 	{
 		(*i).second.delUser(name);
 	}
+	// Erase user
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
+	{
+		if ((*i)->getNickname() == name)
+		{
+display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
+			delete (*i);
+			break ;
+		}
+	}
+// delete poll_fds
 	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); i++)
 	{
 		if ((*i).fd == findFdByUsername(name))
 		{
 display.addMessage("Debug: i.fd = " + std::to_string((*i).fd) + " /// Debug: userFd = " + std::to_string(findFdByUsername(name)) + "\n");
 			_pfds.erase(i);
-			break ;
-		}
-	}
-
-	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
-	{
-		if ((*i)->getNickname() == name)
-		{
-display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
-			close((*i)->getFd());
-			_users.erase(i);
 			break ;
 		}
 	}

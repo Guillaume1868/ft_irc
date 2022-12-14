@@ -17,8 +17,8 @@ User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
 
 User::~User(void)
 {
-	//close(_fd);
-	//_fd = -1;
+	close(_fd);
+	_fd = -1;
 }
 
 void	User::setUsername(std::string username)
