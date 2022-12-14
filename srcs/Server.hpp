@@ -48,7 +48,7 @@ class Server
 	std::string			getPassword();
 	Channel				*findChannel(std::string name);
 	void				addChannel(std::string name);
-	void				delUser(int fdFix);
+	void				delUser(std::string name);
 };
 
 #endif

@@ -91,7 +91,7 @@ void	Server::pollLoop()
 				{
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
-						throw std::runtime_error("error: accept");
+						display.addError("Error: accept");
 					//User tmp(new_fd, this);
 					//_users.push_back(tmp);
 					_users.push_back(new User(new_fd, this, i));
@@ -225,7 +225,7 @@ void    Server::addChannel(std::string name)
 	_channels.insert(std::make_pair(name, Channel(name)));
 }
 
-void	Server::delUser(int fdFix)
+void	Server::delUser(std::string name)
 {
 /*// Delete user from all channels
 	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
@@ -233,31 +233,30 @@ void	Server::delUser(int fdFix)
 		(*i).second.delUser(name);
 	}*/
 // Erase user
-/*	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
 	{
 		if ((*i)->getNickname() == name)
 		{
 display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
 			delete (*i);
-		//	_users.erase(i);
+			_users.erase(i);
 			break ;
-			display.addMessage("-------------------- merde\n");
 		}
 	}
-*/
+
 //	display.addMessage(std::to_string(fdFix));
-	delete (_users[fdFix]);
-	_users.erase(_users.begin() + fdFix);
-	close(_pfds[fdFix].fd);
-//	_pfds.erase(_pfds.begin() + fdFix);
+	//	delete (_users[fdFix]);
+	//	_users.erase(_users.begin() + fdFix);
+	//	close(_pfds[fdFix + 1].fd);
+	//	_pfds.erase(_pfds.begin() + fdFix);
 
 // delete poll_fds
-//	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); ++i)
-//	{
-//		if ((*i).fd == findFdByUsername(name))
-//		{
-			_pfds.erase(_pfds.begin() + fdFix);
-//			break ;
-//		}
-//	}
+	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); ++i)
+	{
+		if ((*i).fd == findFdByUsername(name))
+		{
+			_pfds.erase(i);
+			break ;
+		}
+	}
 }

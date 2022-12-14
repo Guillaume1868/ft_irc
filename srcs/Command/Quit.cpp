@@ -14,7 +14,7 @@ Quit::~Quit()
 int	Quit::execute(User &user, std::vector<std::string> args)
 {
 	(void)args;
-	_serv->delUser(user._fdFix);
+	_serv->delUser(user.getNickname());
 	display.update();
 	return (0);
 }
