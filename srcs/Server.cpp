@@ -14,7 +14,7 @@ extern Display display;
 
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
-	display.setup(&_channels, _users);
+	display.setup(&_channels, &_users);
 	display.update();
 	listen();
 	_commands["PING"] = new Ping(this);
