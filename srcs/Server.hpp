@@ -30,7 +30,7 @@ class Server
 	std::string			_port;
 	std::string			_pass;
 	std::vector<pollfd>		_pfds;
-	std::vector<User>		_users;
+	std::vector<User*>		_users;
 	std::map<std::string, Channel>	_channels;
 	std::map<std::string, ACommand*>	_commands;
   public:

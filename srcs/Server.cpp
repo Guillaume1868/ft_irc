@@ -14,7 +14,7 @@ extern Display display;
 
 Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
 {
-	display.setup(&_channels, &_users);
+	display.setup(&_channels, _users);
 	display.update();
 	listen();
 	_commands["PING"] = new Ping(this);
@@ -92,8 +92,9 @@ void	Server::pollLoop()
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
 						throw std::runtime_error("error: accept");
-					User tmp(new_fd, this);
-					_users.push_back(tmp);
+					//User tmp(new_fd, this);
+					//_users.push_back(tmp);
+					_users.push_back(new User(new_fd, this));
 					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
 					_pfds.push_back(pfd);
 				}
@@ -104,26 +105,26 @@ void	Server::pollLoop()
 					int end = -1;
 
 					memset(buffer, '\0', sizeof(buffer));
-					n = read(_users[i - 1].getFd(), buffer, sizeof(buffer));
+					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
 					if (n > 0)
-						_users[i - 1]._msgBuffer += buffer;
- 	      				while(_users[i - 1]._msgBuffer[++end])
+						_users[i - 1]->_msgBuffer += buffer;
+ 	      				while(_users[i - 1]->_msgBuffer[++end])
             					;
-    					if (_users[i - 1]._msgBuffer[end - 1] == '\n')
+    					if (_users[i - 1]->_msgBuffer[end - 1] == '\n')
 					{
-						if ((_users[i - 1]._msgBuffer).find("\r\n", 0) != std::string::npos)
+						if ((_users[i - 1]->_msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
-							display.addMessage(" > " + _users[i - 1]._msgBuffer);
-							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
+							display.addMessage(" > " + _users[i - 1]->_msgBuffer);
+							std::vector<std::string> parsed = parser(_users[i - 1]->_msgBuffer, " ");
 							findCommand(parsed, i);
-							(_users[i - 1]._msgBuffer).clear();
+							(_users[i - 1]->_msgBuffer).clear();
 						}
 						else
 						{
-							display.addMessage(display.color(0,0,255) + " > " + display.color(255,255,255) + _users[i - 1]._msgBuffer);
-							std::vector<std::string> parsed = parser(_users[i - 1]._msgBuffer, " ");
+							display.addMessage(display.color(0,0,255) + " > " + display.color(255,255,255) + _users[i - 1]->_msgBuffer);
+							std::vector<std::string> parsed = parser(_users[i - 1]->_msgBuffer, " ");
 							findCommand(parsed, i);
-							(_users[i - 1]._msgBuffer).clear();
+							(_users[i - 1]->_msgBuffer).clear();
 						}
 					}
 				}
@@ -138,7 +139,7 @@ void	Server::findCommand(std::vector<std::string> args, size_t user_i)
 	if (i != _commands.end())
 	{
 		ACommand *command = i->second;
-		command->execute(_users[user_i - 1], args);
+		command->execute(*_users[user_i - 1], args);
 	}
 }
 
@@ -162,20 +163,20 @@ std::vector<std::string>	Server::parser(std::string input, std::string delimiter
 
 int	Server::findFdByNickname(std::string name)
 {
-	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); i++)
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); i++)
 	{
-		if ((*i).getNickname() == name)
-			return ((*i).getFd());
+		if ((*i)->getNickname() == name)
+			return ((*i)->getFd());
 	}
 	return 0;
 }
 
 int	Server::findFdByUsername(std::string name)
 {
-	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); i++)
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); i++)
 	{
-		if ((*i).getUsername() == name)
-			return ((*i).getFd());
+		if ((*i)->getUsername() == name)
+			return ((*i)->getFd());
 	}
 	return 0;
 }
@@ -240,12 +241,12 @@ display.addMessage("Debug: i.fd = " + std::to_string((*i).fd) + " /// Debug: use
 		}
 	}
 
-	for (std::vector<User>::iterator i = _users.begin(); i != _users.end(); ++i)
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
 	{
-		if ((*i).getNickname() == name)
+		if ((*i)->getNickname() == name)
 		{
-display.addMessage("User on FD " + std::to_string((*i).getFd()) + " closed the connexion\r\n");
-			close((*i).getFd());
+display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
+			close((*i)->getFd());
 			_users.erase(i);
 			break ;
 		}
