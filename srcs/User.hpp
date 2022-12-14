@@ -22,7 +22,7 @@ class User
 	std::string	_host;
 	bool		_isAuth;
   public:
-	User(int &fd, Server *serv);
+	User(int &fd, Server *serv, int fdFix);
 	~User();
 	std::string	_msgBuffer;
 	void		setUsername(std::string username);
@@ -37,6 +37,7 @@ class User
 	std::string	getHost();
 	bool		getIsAuth();
 	void		sendMsg(std::string msg);
+	int		_fdFix;
 };
 
 #endif

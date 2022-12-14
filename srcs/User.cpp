@@ -4,7 +4,7 @@
 
 extern Display display;
 
-User::User(int &fd, Server *serv) : _serv(serv), _fd(fd)
+User::User(int &fd, Server *serv, int fdFix) : _serv(serv), _fd(fd), _fdFix(fdFix)
 {
 	std::string result;		//
 	std::ostringstream convert;	// used to convert int to std::string
