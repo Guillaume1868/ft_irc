@@ -92,9 +92,7 @@ void	Server::pollLoop()
 					int new_fd;
 					if ((new_fd = accept(_socket, NULL, NULL)) == -1)
 						display.addError("Error: accept");
-					//User tmp(new_fd, this);
-					//_users.push_back(tmp);
-					_users.push_back(new User(new_fd, this, i));
+					_users.push_back(new User(new_fd, this));
 					pollfd pfd = {.fd = new_fd, .events = POLLIN, .revents = 0};
 					_pfds.push_back(pfd);
 				}
@@ -114,14 +112,14 @@ void	Server::pollLoop()
 					{
 						if ((_users[i - 1]->_msgBuffer).find("\r\n", 0) != std::string::npos)
 						{
-//							display.addMessage(" > " + _users[i - 1]->_msgBuffer);
+							display.addMessage(" > " + _users[i - 1]->_msgBuffer);
 							std::vector<std::string> parsed = parser(_users[i - 1]->_msgBuffer, " ");
 							findCommand(parsed, i);
 							(_users[i - 1]->_msgBuffer).clear();
 						}
 						else
 						{
-//							display.addMessage(display.color(0,0,255) + " > " + display.color(255,255,255) + _users[i - 1]->_msgBuffer);
+							display.addMessage(display.color(0,0,255) + " > " + display.color(255,255,255) + _users[i - 1]->_msgBuffer);
 							std::vector<std::string> parsed = parser(_users[i - 1]->_msgBuffer, " ");
 							findCommand(parsed, i);
 							(_users[i - 1]->_msgBuffer).clear();
@@ -227,12 +225,13 @@ void    Server::addChannel(std::string name)
 
 void	Server::delUser(std::string name)
 {
-/*// Delete user from all channels
+/*	// Delete user from all channels
 	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
 	{
 		(*i).second.delUser(name);
 	}*/
-// Erase user
+	int fdTmp = findFdByNickname(name);
+	// Erase user
 	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
 	{
 		if ((*i)->getNickname() == name)
@@ -243,17 +242,10 @@ display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the 
 			break ;
 		}
 	}
-
-//	display.addMessage(std::to_string(fdFix));
-	//	delete (_users[fdFix]);
-	//	_users.erase(_users.begin() + fdFix);
-	//	close(_pfds[fdFix + 1].fd);
-	//	_pfds.erase(_pfds.begin() + fdFix);
-
-// delete poll_fds
+	// Erase _pfds
 	for (std::vector<pollfd>::iterator i = _pfds.begin(); i != _pfds.end(); ++i)
 	{
-		if ((*i).fd == findFdByUsername(name))
+		if ((*i).fd == fdTmp)
 		{
 			_pfds.erase(i);
 			break ;
