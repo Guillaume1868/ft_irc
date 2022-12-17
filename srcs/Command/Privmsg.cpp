@@ -27,12 +27,14 @@ int	Privmsg::execute(User &user, std::vector<std::string> args)
 	std::string msg = concatMsg(args);
 	if (args[1].front() == '#') // = channel
 	{
+		display.addError("Sending message to chan");
 		Channel *chan = _serv->findChannel(args[1]);
 		chan->privmsgToAllUsers(user, msg);
 	}
 	else
 	{
-		user.sendMsg(":" + user.getNickname() + " PRIVMSG " + args[1] + " :" + msg);
+		_serv->getUserByNick(args[1])->sendMsg(":" + user.getNickname() + " PRIVMSG " + args[1] + " :" + msg + "\r\n");
+		display.addError("User : " + args[1]);
 	}
 	return 0;
 }

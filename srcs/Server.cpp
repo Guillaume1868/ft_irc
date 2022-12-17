@@ -24,6 +24,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["USER"] = new UserCmd(this);
 	_commands["JOIN"] = new Join(this);
 	_commands["QUIT"] = new Quit(this);
+	_commands["PRIVMSG"] = new Privmsg(this);
 	pollLoop();
 }
 
@@ -39,7 +40,7 @@ void Server::listen()
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_CANONNAME;
-	const int enable = 1;	
+	const int enable = 1;
 	if (getaddrinfo(_host.c_str(), _port.c_str(), &hints, &servinfo) != 0)
 	{
 		display.addError("Error: getaddrinfo failed");
@@ -166,6 +167,16 @@ int	Server::findFdByNickname(std::string name)
 		if ((*i)->getNickname() == name)
 			return ((*i)->getFd());
 	}
+	return 0;
+}
+
+User* Server::getUserByNick(std::string nick)
+{
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); i++)
+		{
+			if ((*i)->getNickname() == nick)
+				return *i;
+		}
 	return 0;
 }
 

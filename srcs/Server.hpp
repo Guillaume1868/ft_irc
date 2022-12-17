@@ -40,6 +40,7 @@ class Server
 	void		pollLoop();
 	int		_socket;
 	int				findFdByNickname(std::string name);
+	User*			getUserByNick(std::string nick);
 	int				findFdByUsername(std::string name);
 	void				sendMsg(User *user, std::string msg);
 	void				sendMsg(std::string name, std::string msg);
