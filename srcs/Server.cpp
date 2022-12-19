@@ -6,6 +6,7 @@
 #include "Command/UserCmd.hpp"
 #include "Command/Join.hpp"
 #include "Command/Privmsg.hpp"
+#include "Command/Notice.hpp"
 #include "Command/Quit.hpp"
 #include "Command/Kick.hpp"
 
@@ -27,6 +28,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["QUIT"] = new Kick(this);
 	_commands["KICK"] = new Kick(this);
 	_commands["PRIVMSG"] = new Privmsg(this);
+	_commands["NOTICE"] = new Notice(this);
 	pollLoop();
 }
 
