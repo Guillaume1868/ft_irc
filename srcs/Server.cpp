@@ -172,6 +172,16 @@ int	Server::findFdByNickname(std::string name)
 	return 0;
 }
 
+User*	Server::getUserByNick(std::string nick)
+{
+	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); i++)
+		{
+			if ((*i)->getNickname() == nick)
+				return *i;
+		}
+	return 0;
+}
+
 int	Server::findFdByUsername(std::string name)
 {
 	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); i++)
