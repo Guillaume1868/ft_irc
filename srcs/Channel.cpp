@@ -146,7 +146,8 @@ void		Channel::privmsgToAllUsers(User &user, std::string msg)
 {
 	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); i++)
 	{
-		(*i)->sendMsg(":" + user.getNickname() + " PRIVMSG " + this->_chanName + " " + msg + "\r\n");
+		if ((*i) != &user)
+			(*i)->sendMsg(":" + user.getNickname() + " PRIVMSG " + this->_chanName + " " + msg + "\r\n");
 	}
 }
 
