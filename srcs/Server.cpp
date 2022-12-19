@@ -7,6 +7,7 @@
 #include "Command/Join.hpp"
 #include "Command/Privmsg.hpp"
 #include "Command/Quit.hpp"
+#include "Command/Kick.hpp"
 
 #include <vector>
 
@@ -23,7 +24,8 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["NICK"] = new Nick(this);
 	_commands["USER"] = new UserCmd(this);
 	_commands["JOIN"] = new Join(this);
-	_commands["QUIT"] = new Quit(this);
+	_commands["QUIT"] = new Kick(this);
+	_commands["KICK"] = new Kick(this);
 	_commands["PRIVMSG"] = new Privmsg(this);
 	pollLoop();
 }
