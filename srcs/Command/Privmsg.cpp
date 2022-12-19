@@ -24,17 +24,30 @@ std::string	concatMsg(std::vector<std::string> args)
 
 int	Privmsg::execute(User &user, std::vector<std::string> args)
 {
+	if (args.size() < 3) {
+		user.sendMsg(" 461 PRIVMSG :Not enough parameters\r\n");
+		return 1;
+	}
 	std::string msg = concatMsg(args);
 	if (args[1].front() == '#') // = channel
 	{
-		display.addError("Sending message to chan");
 		Channel *chan = _serv->findChannel(args[1]);
+		if (!chan)
+		{
+			user.sendMsg(" 404 " + args[1] + " :Cannot send to channel\r\n");
+			return 1;
+		}
 		chan->privmsgToAllUsers(user, msg);
 	}
 	else
 	{
-		_serv->getUserByNick(args[1])->sendMsg(":" + user.getNickname() + " PRIVMSG " + args[1] + " :" + msg + "\r\n");
-		display.addError("User : " + args[1]);
+		User *target = _serv->getUserByNick(args[1]);
+		if (!target)
+		{
+			user.sendMsg(" 401 " + args[1] + " :No such nick/channel\r\n");
+			return 1;
+		}
+		target->sendMsg(":" + user.getNickname() + " PRIVMSG " + args[1] + " " + msg + "\r\n");
 	}
 	return 0;
 }
