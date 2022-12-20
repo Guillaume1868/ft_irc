@@ -25,22 +25,24 @@ int Kick::execute(User &user, std::vector<std::string> args)
 	targets.push_back(args[2]);
 	if (!_serv->findChannel(args[1]))
 	{
-		user.sendMsg( " 403 " + args[1] + " :No such channel:\r\n");
+		user.sendMsg(":0 403 " + args[1] + " :No such channel\r\n");
 		return 1;
 	}
-
-	// if (_serv->getChannel(args[1]).userIsInChan(clicli.getNickname()) != 0)
-	//	clicli << ERR_NOTONCHANNEL(args[1]);
+	if (_serv->findChannel(args[1])->getUserByNick(user.getNickname()) != 0)
+	{
+		user.sendMsg(":0 442 " + args[1] + " :You're not on that channel\r\n");
+		return 1;
+	}
 	if (args.size() < 3)
 	{
-		user.sendMsg( " 461 " + args[0] + " :Not enough parameters\r\n");
+		user.sendMsg(":0 461 " + args[0] + " :Not enough parameters\r\n");
 		return 1;
 	}
-	// if (_serv->findChannel(args[1])->isModo(clicli))
-	// {
-	// 		ERR_CHANOPRIVSNEEDED(args[1]);
-	// 		return 1;
-	// }
+	if (_serv->findChannel(args[1])->isOp(user.getNickname()))
+	{
+		user.sendMsg(":0 482 " + args[1] + " :You're not channel operator");
+		return 1;
+	}
 
 	for (std::vector<std::string>::iterator i = targets.begin(); i != targets.end(); i++)
 	{

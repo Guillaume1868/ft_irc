@@ -39,6 +39,7 @@ class Channel
 	void		msgToAllUsers(std::string msg);
 	void            privmsgToAllUsers(User &user, std::string msg);
 	std::string     getUserList();
+	int		getUserSize();
 	bool		chanIsFull();
 };
 

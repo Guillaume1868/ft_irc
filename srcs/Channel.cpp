@@ -164,6 +164,11 @@ std::string	Channel::getUserList()
 	return (answer);
 }
 
+int	Channel::getUserSize()
+{
+	return (_connectedUsers.size());
+}
+
 bool	Channel::chanIsFull()
 {
 	if (_connectedUsers.size() >= (unsigned long)_maxUsers)

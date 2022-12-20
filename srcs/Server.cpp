@@ -25,7 +25,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["NICK"] = new Nick(this);
 	_commands["USER"] = new UserCmd(this);
 	_commands["JOIN"] = new Join(this);
-	_commands["QUIT"] = new Kick(this);
+	_commands["QUIT"] = new Quit(this);
 	_commands["KICK"] = new Kick(this);
 	_commands["PRIVMSG"] = new Privmsg(this);
 	_commands["NOTICE"] = new Notice(this);
@@ -240,18 +240,29 @@ void    Server::addChannel(std::string name)
 
 void	Server::delUser(std::string name)
 {
-/*	// Delete user from all channels
-	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); i++)
+	// Delete user from all channels
+display.addMessage("1\r\n");
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); ++i)
 	{
 		(*i).second.delUser(name);
-	}*/
+	}
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end();)
+	{
+		if ((*i).second.getUserSize() == 0)
+		{
+			_channels.erase(i++);
+		}
+		else
+			i++;
+	}
+display.addMessage("2\r\n");
 	int fdTmp = findFdByNickname(name);
 	// Erase user
 	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
 	{
 		if ((*i)->getNickname() == name)
 		{
-display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
+			display.addMessage("User on FD " + std::to_string((*i)->getFd()) + " closed the connexion\r\n");
 			delete (*i);
 			_users.erase(i);
 			break ;
