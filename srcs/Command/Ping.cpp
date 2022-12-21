@@ -11,11 +11,9 @@ Ping::~Ping()
 
 int	Ping::execute(User &user, std::vector<std::string> args)
 {
-	(void)user;
 	std::string	pong = ":0 PONG";
 	for (unsigned long i = 1; i < args.size(); i++)
 		pong += (" " + args[i]);
-	//_serv->sendMsg(user.getNickname(), pong);
 	_serv->sendMsg(&user, pong);
     return 0;
 }

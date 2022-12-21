@@ -34,6 +34,11 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 
 Server::~Server(void)
 {
+	/*for (std::map<std::string, ACommand*>::iterator i = _commands.end(); i != _commands.begin(); i--)
+	{
+		delete(*i->second);
+	}*/
+	
 }
 
 void Server::listen()
@@ -48,32 +53,35 @@ void Server::listen()
 	if (getaddrinfo(_host.c_str(), _port.c_str(), &hints, &servinfo) != 0)
 	{
 		display.addError("Error: getaddrinfo failed");
-		//kill server function;
+		exit(1);
 	}
 	if ((_socket = socket(servinfo->ai_family, servinfo->ai_socktype, servinfo->ai_protocol)) == -1)
 	{
 		display.addError("Error: socket failed");
-		//kill server function;
+		exit(1);
 	}
 	else if (setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
 	{
 		close(_socket);
 		freeaddrinfo(servinfo);
 		display.addError("Error: setsockopt failed");
-		//kill server function;
+		exit(1);
 	}
 	else if (bind(_socket, servinfo->ai_addr, servinfo->ai_addrlen) == -1)
 	{
 		close(_socket);
 		freeaddrinfo(servinfo);
 		display.addError("Error: binding failed");
-		//kill server function;
+		exit(1);
 	}
 	int flags = fcntl(_socket, F_GETFL, 0);
     	fcntl(_socket, F_SETFL, flags | O_NONBLOCK);
 	freeaddrinfo(servinfo);
 	if (::listen(_socket, SOMAXCONN) == -1)
+	{
 		display.addError("Error: listening failed");
+		exit(1);
+	}
 	display.addMessage( display.color(0,255,0) + "Server is listening on port " + _port);
 }
 
@@ -86,7 +94,7 @@ void	Server::pollLoop()
 		if (poll(_pfds.data(), _pfds.size(), -1) == -1)
 		{
 			display.addError("Error: poll");
-			//kill server function;
+			exit(1);
 		}
 		for (size_t i = 0; i < _pfds.size(); i++)
 		{
@@ -109,8 +117,14 @@ void	Server::pollLoop()
 
 					memset(buffer, '\0', sizeof(buffer));
 					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
+					display.addMessage(std::to_string(n));
 					if (n > 0)
 						_users[i - 1]->_msgBuffer += buffer;
+					else if (n == 0)
+					{
+						delUser(_users[i - 1]->getNickname());
+						display.update();
+					}
  	      				while(_users[i - 1]->_msgBuffer[++end])
             					;
     					if (_users[i - 1]->_msgBuffer[end - 1] == '\n')
