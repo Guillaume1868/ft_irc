@@ -13,7 +13,7 @@ Part::~Part()
 
 int	Part::execute(User &user, std::vector<std::string> args)
 {
-	if (args.size() == 2 || args.size() == 3)
+	if (args.size() == 3 || args.size() == 4)
 	{
 		if (_serv.findChannel(args[1]) == 0)
 		{
