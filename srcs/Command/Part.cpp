@@ -11,7 +11,7 @@ Part::~Part()
 {
 }
 
-std::string fullArg(std::vector<std::string> args)
+std::string concatMsg(std::vector<std::string> args)
 {
 	std::string fullMsg;
 	for(std::vector<std::string>::iterator i = args.begin()+2; i != args.end(); i++)
@@ -45,8 +45,8 @@ int	Part::execute(User &user, std::vector<std::string> args)
 		return (1);
 	}
 	
-	std::string fullMsg = fullArg(args);
-	_serv->findChannel(args[1])->msgToAllUsers(":" + user.getNickname() + " PART " + args[1] + " " + fullMsg + "\r\n");
+	std::string msg = concatMsg(args);
+	_serv->findChannel(args[1])->msgToAllUsers(":" + user.getNickname() + " PART " + args[1] + " " + msg + "\r\n");
 	_serv->findChannel(args[1])->delUser(user.getNickname());
 	return (0);
 }
