@@ -9,6 +9,7 @@
 #include "Command/Notice.hpp"
 #include "Command/Quit.hpp"
 #include "Command/Kick.hpp"
+#include "Command/Part.hpp"
 
 #include <vector>
 
@@ -29,6 +30,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["KICK"] = new Kick(this);
 	_commands["PRIVMSG"] = new Privmsg(this);
 	_commands["NOTICE"] = new Notice(this);
+	_commands["PART"] = new Part(this);
 	pollLoop();
 }
 
