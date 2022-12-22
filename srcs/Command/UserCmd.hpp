@@ -4,9 +4,9 @@
 
 class UserCmd : public ACommand
 {
-    public:
-        UserCmd(Server *serv);
-        ~UserCmd();
-        int     execute(User &user, std::vector<std::string> args);
+	public:
+		UserCmd(Server *serv);
+		~UserCmd();
+		int execute(User &user, std::vector<std::string> args);
 };
 #endif

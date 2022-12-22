@@ -4,9 +4,12 @@
 
 class Part : public ACommand
 {
-    public:
-        Part(Server *serv);
-        ~Part();
-        int     execute(User &user, std::vector<std::string> args);
+	public:
+		Part(Server *serv);
+		~Part();
+		int execute(User &user, std::vector<std::string> args);
+	private:
+		std::string concatMsg(std::vector<std::string> args);
+
 };
 #endif
