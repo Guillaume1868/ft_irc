@@ -1,14 +1,15 @@
 #include "Channel.hpp"
+#include "Server.hpp"
 #include "User.hpp"
 
 extern Display display;
 
-Channel::Channel(std::string name) : _chanName(name), _maxUsers(100)
+Channel::Channel(std::string name, Server *serv) : _chanName(name), _maxUsers(100), _serv(serv)
 {
 
 }
 
-Channel::Channel(std::string name, std::string password) : _chanName(name), _pass(password), _maxUsers(100)
+Channel::Channel(std::string name, std::string password, Server *serv) : _chanName(name), _pass(password), _maxUsers(100), _serv(serv)
 {
 
 }
@@ -32,6 +33,8 @@ void	Channel::delUser(std::string name)
 			break;
 		}
 	}
+	_serv->delChanIfEmpty(getChanName());
+
 }
 
 User	*Channel::getUserByNick(std::string nick)

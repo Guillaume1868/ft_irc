@@ -14,8 +14,6 @@ Mode::~Mode()
 int	Mode::execute(User &user, std::vector<std::string> args)
 {
 	int	mode = 42;
-	if (args.size() == 2)
-		return(1);
 	if (args.size() != 4)
 	{
 		user.sendMsg(":0 461 Mode :Number of params invalid\r\n");

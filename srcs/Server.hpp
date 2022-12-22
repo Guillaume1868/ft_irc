@@ -50,6 +50,7 @@ class Server
 	Channel				*findChannel(std::string name);
 	void				addChannel(std::string name);
 	void				delUser(std::string name);
+	void				delChanIfEmpty(std::string name);
 };
 
 #endif

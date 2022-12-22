@@ -9,6 +9,7 @@
 #include "Command/Notice.hpp"
 #include "Command/Quit.hpp"
 #include "Command/Kick.hpp"
+#include "Command/Part.hpp"
 
 #include <vector>
 
@@ -29,6 +30,7 @@ Server::Server(std::string host, std::string port, std::string pass) : _host(hos
 	_commands["KICK"] = new Kick(this);
 	_commands["PRIVMSG"] = new Privmsg(this);
 	_commands["NOTICE"] = new Notice(this);
+	_commands["PART"] = new Part(this);
 	pollLoop();
 }
 
@@ -248,27 +250,16 @@ Channel	*Server::findChannel(std::string name)
 
 void    Server::addChannel(std::string name)
 {
-	_channels.insert(std::make_pair(name, Channel(name)));
+	_channels.insert(std::make_pair(name, Channel(name, this)));
 }
 
 void	Server::delUser(std::string name)
 {
 	// Delete user from all channels
-display.addMessage("1\r\n");
 	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end(); ++i)
 	{
 		(*i).second.delUser(name);
 	}
-	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end();)
-	{
-		if ((*i).second.getUserSize() == 0)
-		{
-			_channels.erase(i++);
-		}
-		else
-			i++;
-	}
-display.addMessage("2\r\n");
 	int fdTmp = findFdByNickname(name);
 	// Erase user
 	for (std::vector<User *>::iterator i = _users.begin(); i != _users.end(); ++i)
@@ -290,4 +281,18 @@ display.addMessage("2\r\n");
 			break ;
 		}
 	}
+}
+
+void	Server::delChanIfEmpty(std::string name)
+{
+	for (std::map<std::string, Channel>::iterator i = _channels.begin(); i != _channels.end();)
+	{
+		if ((*i).second.getUserSize() == 0 && (*i).second.getChanName() == name)
+		{
+			_channels.erase(i++);
+		}
+		else
+			i++;
+	}
+
 }

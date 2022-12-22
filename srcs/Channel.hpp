@@ -2,23 +2,26 @@
 #define CHANNEL_HPP
 
 #include "User.hpp"
+#include "Server.hpp"
 
 #include <vector>
 
 class User;
+class Server;
 
 class Channel
 {
   private:
-	std::string			_chanName;
-	std::string			_pass;
-	std::vector<User *>		_connectedUsers;
+	std::string					_chanName;
+	std::string					_pass;
+	std::vector<User *>			_connectedUsers;
 	std::vector<std::string>	_bannedUsers;
 	std::vector<std::string>	_opUsers;
-	int				_maxUsers;
+	int							_maxUsers;
+	Server						*_serv;
   public:
-	Channel(std::string name);
-	Channel(std::string name, std::string password);
+	Channel(std::string name, Server *serv);
+	Channel(std::string name, std::string password, Server *serv);
 	~Channel();
 	void		joinChannel(User *user);
 	void		delUser(std::string name);
