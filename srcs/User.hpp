@@ -14,29 +14,29 @@ class User
 {
 	protected:
 		Server *	_serv;
-  private:
-	int		_fd;
-	std::string	_username;
-	std::string	_nickname;
-	std::string	_password;	
-	std::string	_host;
-	bool		_isAuth;
-  public:
-	User(int &fd, Server *serv);
-	~User();
-	std::string	_msgBuffer;
-	void		setUsername(std::string username);
-	void		setNickname(std::string nickname);
-	void		setPassword(std::string password);
-	void		setHost(std::string host);
-	void		setAuth();
-	int		getFd();
-	std::string	getUsername();
-	std::string	getNickname();
-	std::string	getPassword();
-	std::string	getHost();
-	bool		getIsAuth();
-	void		sendMsg(std::string msg);
+	private:
+		bool		_isAuth;
+		int			_fd;
+		std::string	_host;
+		std::string	_nickname;
+		std::string	_password;	
+		std::string	_username;
+	public:
+		User(int &fd, Server *serv);
+		~User();
+		bool		getIsAuth();
+		int			getFd();
+		std::string	_msgBuffer;
+		std::string	getHost();
+		std::string	getNickname();
+		std::string	getPassword();
+		std::string	getUsername();
+		void		sendMsg(std::string msg);
+		void		setAuth();
+		void		setHost(std::string host);
+		void		setNickname(std::string nickname);
+		void		setPassword(std::string password);
+		void		setUsername(std::string username);
 };
 
 #endif

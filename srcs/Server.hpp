@@ -24,33 +24,33 @@ class ACommand;
 
 class Server
 {
-  private:
-	std::string			_host;
-	std::string			_servername;
-	std::string			_port;
-	std::string			_pass;
-	std::vector<pollfd>		_pfds;
-	std::vector<User*>		_users;
-	std::map<std::string, Channel>	_channels;
-	std::map<std::string, ACommand*>	_commands;
-  public:
-	Server(std::string host, std::string port, std::string password);
-	~Server();
-	void		listen();
-	void		pollLoop();
-	int		_socket;
-	int				findFdByNickname(std::string name);
-	User*				getUserByNick(std::string nick);
-	int				findFdByUsername(std::string name);
-	void				sendMsg(User *user, std::string msg);
-	void				sendMsg(std::string name, std::string msg);
-	void				findCommand(std::vector<std::string> args, size_t user_i);
-	std::vector<std::string>	parser(std::string input, std::string delimiter);
-	std::string			getPassword();
-	Channel				*findChannel(std::string name);
-	void				addChannel(std::string name);
-	void				delUser(std::string name);
-	void				delChanIfEmpty(std::string name);
+	private:
+		std::map<std::string, ACommand*>	_commands;
+		std::map<std::string, Channel>	_channels;
+		std::string			_host;
+		std::string			_pass;
+		std::string			_port;
+		std::string			_servername;
+		std::vector<pollfd>		_pfds;
+		std::vector<User*>		_users;
+	public:
+		Server(std::string host, std::string port, std::string password);
+		~Server();
+		Channel		*findChannel(std::string name);
+		int			findFdByNickname(std::string name);
+		int			findFdByUsername(std::string name);
+		int			_socket;
+		std::string					getPassword();
+		std::vector<std::string>	parser(std::string input, std::string delimiter);
+		User*		getUserByNick(std::string nick);
+		void		addChannel(std::string name);
+		void		delChanIfEmpty(std::string name);
+		void		delUser(std::string name);
+		void		findCommand(std::vector<std::string> args, size_t user_i);
+		void		sendMsg(std::string name, std::string msg);
+		void		sendMsg(User *user, std::string msg);
+		void		listen();
+		void		pollLoop();
 };
 
 #endif

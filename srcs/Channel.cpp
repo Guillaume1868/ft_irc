@@ -4,12 +4,12 @@
 
 extern Display display;
 
-Channel::Channel(std::string name, Server *serv) : _chanName(name), _maxUsers(100), _serv(serv)
+Channel::Channel(std::string name, Server *serv) : _maxUsers(100), _serv(serv), _chanName(name)
 {
 
 }
 
-Channel::Channel(std::string name, std::string password, Server *serv) : _chanName(name), _pass(password), _maxUsers(100), _serv(serv)
+Channel::Channel(std::string name, std::string password, Server *serv) : _maxUsers(100), _serv(serv), _chanName(name), _pass(password)
 {
 
 }
