@@ -21,7 +21,7 @@ int	Mode::execute(User &user, std::vector<std::string> args)
 	}
 	display.addError("1");
 	if (_serv->findChannel(args[1])->isOp(user.getNickname()) == 1)
-		user.sendMsg(":0 482 " + args[1] + " :You're not channel operator");
+		user.sendMsg(":482 " + args[1] + " :You're not channel operator");
 	display.addError("2");
 	if (args[2].front() == '+')
 		mode = 0;

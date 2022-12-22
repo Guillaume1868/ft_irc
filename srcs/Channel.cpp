@@ -25,13 +25,12 @@ void	Channel::joinChannel(User *user)
 
 void	Channel::delUser(std::string name)
 {
-	for (std::vector<User *>::iterator i = _connectedUsers.begin(); i != _connectedUsers.end(); ++i)
+	for (std::vector<User *>::iterator i = _connectedUsers.begin() + 1; i != _connectedUsers.end();)
 	{
 		if ((*i)->getNickname() == name)
-		{
 			_connectedUsers.erase(i);
-			break;
-		}
+		else
+			i++;
 	}
 	_serv->delChanIfEmpty(getChanName());
 
