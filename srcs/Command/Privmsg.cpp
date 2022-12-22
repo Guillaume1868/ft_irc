@@ -11,7 +11,7 @@ Privmsg::~Privmsg()
 {
 }
 
-std::string	concatMsg(std::vector<std::string> args)
+std::string	Privmsg::concatMsg(std::vector<std::string> args)
 {
 	std::string fullMsg;
 	for(std::vector<std::string>::iterator i = args.begin()+2; i != args.end(); i++)

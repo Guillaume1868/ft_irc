@@ -8,5 +8,7 @@ class Privmsg : public ACommand
 		Privmsg(Server *serv);
 		~Privmsg();
 		int execute(User &user, std::vector<std::string> args);
+	private:
+		std::string	concatMsg(std::vector<std::string> args);
 };
 #endif
