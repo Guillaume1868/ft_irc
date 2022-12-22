@@ -15,7 +15,7 @@
 
 extern Display display;
 
-Server::Server(std::string host, std::string port, std::string pass) : _host(host), _port(port), _pass(pass)
+Server::Server(std::string host, std::string port, std::string pass) : _host(host), _pass(pass), _port(port)
 {
 	display.setup(&_channels, &_users);
 	display.update();
