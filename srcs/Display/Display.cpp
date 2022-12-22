@@ -59,16 +59,16 @@ void Display::update()
 		// Display user list
 		// Put cursor topright (col 66)
 		std::cout << "\033[1;66H" << color(135, 109, 190) << "Users :" << color() << std::endl;
-		// for (std::vector<User *>::iterator it = _users->begin(); it != _users->end(); ++it)
-		// {
-		// 	if (std::distance(_users->begin(), it) >= 4)
-		// 	{
-		// 		std::cout << "\033[6;66H" << color(244, 202, 105) << std::distance(it, _users->end()) << " more" << color() << std::endl;
-		// 		break;
-		// 	}
-		// 	std::cout << "\033[" << std::distance(_users->begin(), it) + 2 << ";66H" << trunc((*it)->getNickname(), 15) << std::endl;
-		// }
-		std::cout << "\033[3;66H" << _users->size();
+		for (std::vector<User *>::iterator it = _users->begin(); it != _users->end(); ++it)
+		{
+			if (std::distance(_users->begin(), it) >= 4)
+			{
+				std::cout << "\033[6;66H" << color(244, 202, 105) << std::distance(it, _users->end()) << " more" << color() << std::endl;
+				break;
+			}
+			std::cout << "\033[" << std::distance(_users->begin(), it) + 2 << ";66H" << trunc((*it)->getNickname(), 15) << std::endl;
+		}
+		//std::cout << "\033[3;66H" << _users->size();
 
 		// Display message list
 		// Put cursor to correct line
