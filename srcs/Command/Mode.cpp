@@ -19,22 +19,18 @@ int	Mode::execute(User &user, std::vector<std::string> args)
 		user.sendMsg(":0 461 Mode :Number of params invalid\r\n");
 		return (1);
 	}
-	display.addError("1");
 	if (_serv->findChannel(args[1])->isOp(user.getNickname()) == 1)
 		user.sendMsg(":0 482 " + args[1] + " :You're not channel operator");
-	display.addError("2");
 	if (args[2].front() == '+')
 		mode = 0;
 	else if (args[2].front() == '-')
 		mode = 1;
-	display.addError("3");
 
 	if (_serv->findChannel(args[1]) == 0)
 	{
 		user.sendMsg(":0 401 " + args[1] + " :No such nick/channel");
 		return (1);
 	}
-	display.addError("4");
 	if (args[2].find('k') != std::string::npos || args[2].find('l') != std::string::npos)
 	{
 		if (args[2].find('k') != std::string::npos) // password channel
