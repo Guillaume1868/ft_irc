@@ -13,7 +13,7 @@ Part::~Part()
 
 int	Part::execute(User &user, std::vector<std::string> args)
 {
-	if (args.size() == 3 || args.size() == 4)
+	if (args.size() > 2 && args[2].front() == ":")
 	{
 		if (_serv.findChannel(args[1]) == 0)
 		{
@@ -28,14 +28,15 @@ int	Part::execute(User &user, std::vector<std::string> args)
 	}
 	else
 		user.sendMsg(":0 461 PART :Not enough parameters\r\n");
-		
-	if (args.size() == 2) // no message
-	{
-		_serv.findChannel(args[1]).msgToAllUsers(":" + user.getNickname() + " PART " + args[1]);
-	}
-	if (args.size() == 3) // with message
-	{
-		_serv.findChannel(args[1]).msgToAllUsers(":" + user.getNickname() + " PART " + args[1] + ":" + args[2]);
-	}
+	
+	std::string fullMsg;
+        for(std::vector<std::string>::iterator i = args.begin()+2; i != args.end(); i++)
+        {
+                fullMsg += (*i);
+                fullMsg += " ";
+        }
+        return (fullMsg);
+
+	_serv.findChannel(args[1]).msgToAllUsers(":" + user.getNickname() + " PART " + args[1] + ":" + args[2]);
 	return (0);
 }
