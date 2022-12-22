@@ -117,7 +117,6 @@ void	Server::pollLoop()
 
 					memset(buffer, '\0', sizeof(buffer));
 					n = read(_users[i - 1]->getFd(), buffer, sizeof(buffer));
-					display.addMessage(std::to_string(n));
 					if (n > 0)
 						_users[i - 1]->_msgBuffer += buffer;
 					else if (n == 0)
