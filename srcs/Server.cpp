@@ -294,5 +294,5 @@ void	Server::delChanIfEmpty(std::string name)
 		else
 			i++;
 	}
-
+	display.update();
 }
